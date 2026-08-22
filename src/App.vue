@@ -1,23 +1,53 @@
 <script setup lang="ts">
-const features = [
-  '24時間制の時計表示',
-  '焼き付き防止のスクリーンセーバー',
-  '座り過ぎ防止タイマー',
-]
-</script>
+import { computed, onMounted, onUnmounted, ref } from "vue";
+const now = ref(new Date());
+let clockInterval: number | undefined;
 
+const pad = (value: number) => String(value).padStart(2, "0");
+
+const timeText = computed(() => {
+  const date = now.value;
+  return {
+    hours: pad(date.getHours()),
+    minutes: pad(date.getMinutes()),
+    seconds: pad(date.getSeconds()),
+  };
+});
+
+const dateText = computed(() => {
+  const date = now.value;
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+  return (
+    String(date.getFullYear()) +
+    "年" +
+    String(date.getMonth() + 1) +
+    "月" +
+    String(date.getDate()) +
+    "日（" +
+    weekdays[date.getDay()] +
+    "）"
+  );
+});
+
+const isoDate = computed(() => now.value.toISOString());
+onMounted(() => {
+  clockInterval = window.setInterval(() => {
+    now.value = new Date();
+  }, 1000);
+});
+onUnmounted(() => {
+  if (clockInterval !== undefined) window.clearInterval(clockInterval);
+});
+</script>
 <template>
-  <main class="welcome">
-    <section class="welcome-card" aria-labelledby="title">
-      <p class="eyebrow">MOBILE SCREEN WATCH</p>
-      <h1 id="title">Vue スタートページ</h1>
-      <p class="lead">
-        24時間制の時計と、座り過ぎ防止タイマーを備えた画面を作っていきます。
-      </p>
-      <ul class="features">
-        <li v-for="feature in features" :key="feature">{{ feature }}</li>
-      </ul>
-      <p class="status"><span aria-hidden="true"></span> 開発環境は起動準備完了です</p>
+  <main class="clock-screen">
+    <section class="clock-block" aria-label="現在時刻">
+      <time class="clock-time" :datetime="isoDate"
+        ><span>{{ timeText.hours }}</span
+        ><span aria-hidden="true">:</span><span>{{ timeText.minutes }}</span
+        ><span class="clock-seconds">:{{ timeText.seconds }}</span></time
+      >
+      <p class="clock-date">{{ dateText }}</p>
     </section>
   </main>
 </template>
