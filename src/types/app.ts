@@ -1,81 +1,81 @@
-export type Theme = 'dark' | 'light'
+export type Theme = "dark" | "light";
 
-export type TimerPhase = 'work' | 'break'
+export type TimerPhase = "work" | "break";
 
 export interface AppSettings {
-  workDurationMinutes: number
-  breakDurationMinutes: number
-  soundEnabled: boolean
-  theme: Theme
-  changeColorOnBounce: boolean
+  workDurationMinutes: number;
+  breakDurationMinutes: number;
+  soundEnabled: boolean;
+  theme: Theme;
+  changeColorOnBounce: boolean;
   /** 通常時に時計が画面を横断する秒数。値が小さいほど速く移動する。 */
-  traversalDurationSeconds: number
+  traversalDurationSeconds: number;
 }
 
 export const DEFAULT_SETTINGS: Readonly<AppSettings> = {
   workDurationMinutes: 50,
   breakDurationMinutes: 10,
   soundEnabled: false,
-  theme: 'dark',
+  theme: "dark",
   changeColorOnBounce: false,
   traversalDurationSeconds: 60,
-}
+};
 
 export const SETTINGS_LIMITS = {
   workDurationMinutes: { min: 1, max: 180 },
   breakDurationMinutes: { min: 1, max: 60 },
-} as const
+} as const;
 
 export const NIGHT_MODE = {
   startHour: 1,
   endHour: 7,
   temporaryWakeDurationMs: 30_000,
   speedRatio: 0.5,
-} as const
+} as const;
 
 export type TimerState =
-  | { status: 'idle' }
+  | { status: "idle" }
   | {
-      status: 'running'
-      phase: TimerPhase
-      startedAt: number
-      endAt: number
+      status: "running";
+      phase: TimerPhase;
+      startedAt: number;
+      endAt: number;
     }
   | {
-      status: 'paused'
-      phase: TimerPhase
-      remainingMs: number
+      status: "paused";
+      phase: TimerPhase;
+      remainingMs: number;
     }
   | {
-      status: 'completed'
-      phase: TimerPhase
-      completedAt: number
-    }
+      status: "completed";
+      phase: TimerPhase;
+      completedAt: number;
+    };
 
-export const INITIAL_TIMER_STATE: Readonly<TimerState> = { status: 'idle' }
+export const INITIAL_TIMER_STATE: Readonly<TimerState> = { status: "idle" };
 
 export interface ClockMotionState {
   position: {
-    x: number
-    y: number
-  }
+    x: number;
+    y: number;
+  };
   direction: {
-    x: -1 | 1
-    y: -1 | 1
-  }
-  isPaused: boolean
+    x: -1 | 1;
+    y: -1 | 1;
+  };
+  isPaused: boolean;
 }
 
 export interface UiState {
-  isMenuOpen: boolean
-  isSettingsOpen: boolean
+  isMenuOpen: boolean;
+  isSettingsOpen: boolean;
   /** 深夜表示を一時解除している場合の解除終了時刻。 */
-  nightModeWakeUntil: number | null
+  nightModeWakeUntil: number | null;
 }
 
 export interface AppState {
-  settings: AppSettings
-  timer: TimerState
-  motion: ClockMotionState
-  ui: UiState
+  settings: AppSettings;
+  timer: TimerState;
+  motion: ClockMotionState;
+  ui: UiState;
 }
