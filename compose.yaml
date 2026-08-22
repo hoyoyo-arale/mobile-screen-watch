@@ -1,0 +1,33 @@
+services:
+  codex:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # run.sh がホストの id -u / id -g をエクスポートしてから
+        # docker-compose を呼び出すことで、コンテナ内ユーザーの
+        # UID/GID をホストの実行ユーザーに合わせる。
+        USERNAME: ${USERNAME:-codex}
+        USER_UID: ${USER_UID:-1000}
+        USER_GID: ${USER_GID:-1000}
+    image: codex-container:latest
+    container_name: ${CONTAINER_NAME:-codex}
+    volumes:
+      # プロジェクトルートを /workspace にマウント。
+      # このcompose.yamlを別プロジェクトにコピーして使う場合は
+      # .env の PROJECT_ROOT を、プロジェクトルートまでの相対パスに合わせて変更する。
+      - ${PROJECT_ROOT:-..}:/workspace
+      # codex login の認証情報(~/.codex/auth.json)や config.toml、
+      # セッション履歴などを永続化する。全プロジェクトで固定名の
+      # ボリュームを共有するので、一度ログインすればどのプロジェクトの
+      # コンテナからでも再ログイン不要になる。
+      - codex-home:/home/${USERNAME:-codex}/.codex
+    working_dir: /workspace
+    ports:
+      - "5173:5173"
+    tty: true
+    stdin_open: true
+
+volumes:
+  codex-home:
+    name: codex-cli-homes
