@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { formatDate, formatTime, toIsoDate } from "../logic/clock";
 
 interface Props {
   now: Date;
@@ -7,29 +8,9 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const pad = (value: number) => String(value).padStart(2, "0");
-
-const timeText = computed(() => ({
-  hours: pad(props.now.getHours()),
-  minutes: pad(props.now.getMinutes()),
-  seconds: pad(props.now.getSeconds()),
-}));
-
-const dateText = computed(() => {
-  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-  return (
-    String(props.now.getFullYear()) +
-    "年" +
-    String(props.now.getMonth() + 1) +
-    "月" +
-    String(props.now.getDate()) +
-    "日（" +
-    weekdays[props.now.getDay()] +
-    "）"
-  );
-});
-
-const isoDate = computed(() => props.now.toISOString());
+const timeText = computed(() => formatTime(props.now));
+const dateText = computed(() => formatDate(props.now));
+const isoDate = computed(() => toIsoDate(props.now));
 </script>
 
 <template>
