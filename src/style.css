@@ -93,11 +93,25 @@ body {
 .theme-toggle:focus-visible {
   opacity: 1;
 }
+@media (orientation: portrait) {
+  .clock-time {
+    font-size: clamp(4rem, 19vw, 15rem);
+  }
+}
+@media (orientation: landscape) {
+  .clock-screen {
+    padding-inline: max(32px, env(safe-area-inset-left))
+      max(32px, env(safe-area-inset-right));
+  }
+  .clock-time {
+    font-size: clamp(3rem, min(19vw, 30vh), 15rem);
+  }
+  .clock-date {
+    margin-top: clamp(16px, 4vh, 32px);
+  }
+}
 @media (orientation: landscape) and (max-height: 500px) {
   .clock-screen {
     padding-block: 16px;
-  }
-  .clock-date {
-    margin-top: 16px;
   }
 }
