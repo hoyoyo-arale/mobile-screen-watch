@@ -18,7 +18,7 @@ export const DEFAULT_SETTINGS: Readonly<AppSettings> = {
   soundEnabled: false,
   theme: "dark",
   changeColorOnBounce: false,
-  movementSpeedPixelsPerSecond: 80,
+  movementSpeedPixelsPerSecond: 200,
 };
 
 export const SETTINGS_LIMITS = {
