@@ -1,29 +1,47 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 import ClockDisplay from "./components/ClockDisplay.vue";
 import { toggleTheme as getNextTheme } from "./logic/theme";
+import type { MotionBounds } from "./logic/motion";
 import type { Theme } from "./types/app";
 
 const now = ref(new Date());
 const theme = ref<Theme>("dark");
+const screenElement = useTemplateRef<HTMLElement>("screenElement");
+const containerSize = ref<MotionBounds>({ width: 0, height: 0 });
 let clockInterval: number | undefined;
+let resizeObserver: ResizeObserver | undefined;
 
 const handleThemeToggle = () => {
   theme.value = getNextTheme(theme.value);
+};
+
+const updateContainerSize = () => {
+  const element = screenElement.value;
+  if (!element) return;
+
+  containerSize.value = {
+    width: element.clientWidth,
+    height: element.clientHeight,
+  };
 };
 
 onMounted(() => {
   clockInterval = window.setInterval(() => {
     now.value = new Date();
   }, 1000);
+  updateContainerSize();
+  resizeObserver = new ResizeObserver(updateContainerSize);
+  if (screenElement.value) resizeObserver.observe(screenElement.value);
 });
 onUnmounted(() => {
   if (clockInterval !== undefined) window.clearInterval(clockInterval);
+  resizeObserver?.disconnect();
 });
 </script>
 <template>
-  <main class="clock-screen" :class="`theme-${theme}`">
-    <ClockDisplay :now="now" />
+  <main ref="screenElement" class="clock-screen" :class="`theme-${theme}`">
+    <ClockDisplay :now="now" :container-size="containerSize" />
     <button
       class="theme-toggle"
       type="button"

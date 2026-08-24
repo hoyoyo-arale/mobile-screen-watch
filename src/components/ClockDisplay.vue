@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, useTemplateRef } from "vue";
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+  useTemplateRef,
+  watch,
+} from "vue";
 import { formatDate, formatTime, toIsoDate } from "../logic/clock";
 import {
   advanceMotion,
@@ -10,6 +17,7 @@ import {
 
 interface Props {
   now: Date;
+  containerSize: MotionBounds;
 }
 
 const props = defineProps<Props>();
@@ -35,13 +43,11 @@ const motionStyle = computed(() => ({
 
 const updateBounds = () => {
   const element = motionElement.value;
-  const container = element?.parentElement;
-
-  if (!element || !container) return;
+  if (!element) return;
 
   bounds.value = {
-    width: Math.max(0, container.clientWidth - element.offsetWidth),
-    height: Math.max(0, container.clientHeight - element.offsetHeight),
+    width: Math.max(0, props.containerSize.width - element.offsetWidth),
+    height: Math.max(0, props.containerSize.height - element.offsetHeight),
   };
 
   if (!hasPositioned) {
@@ -61,6 +67,11 @@ const updateBounds = () => {
   };
 };
 
+watch(
+  () => [props.containerSize.width, props.containerSize.height],
+  updateBounds,
+);
+
 const animate = (timestamp: number) => {
   if (previousTimestamp === undefined) previousTimestamp = timestamp;
 
@@ -73,9 +84,7 @@ const animate = (timestamp: number) => {
 onMounted(() => {
   updateBounds();
   resizeObserver = new ResizeObserver(updateBounds);
-  if (motionElement.value?.parentElement) {
-    resizeObserver.observe(motionElement.value.parentElement);
-  }
+  if (motionElement.value) resizeObserver.observe(motionElement.value);
   animationFrameId = requestAnimationFrame(animate);
 });
 
