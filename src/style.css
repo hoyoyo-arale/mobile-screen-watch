@@ -95,6 +95,35 @@ body {
     border-color 180ms ease,
     opacity 180ms ease;
 }
+.timer-display {
+  position: absolute;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  left: max(24px, env(safe-area-inset-left));
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  color: var(--primary-text);
+}
+.timer-phase,
+.timer-status {
+  margin: 0;
+  color: var(--secondary-text);
+  font-size: 0.8rem;
+}
+.timer-time {
+  font-size: 1.8rem;
+  font-variant-numeric: tabular-nums;
+}
+.timer-action {
+  margin-top: 4px;
+  border: 1px solid var(--control-border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: var(--primary-text);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
   opacity: 1;

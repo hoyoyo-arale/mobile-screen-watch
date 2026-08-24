@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 import ClockDisplay from "./components/ClockDisplay.vue";
+import TimerDisplay from "./components/TimerDisplay.vue";
 import { toggleTheme as getNextTheme } from "./logic/theme";
 import type { MotionBounds } from "./logic/motion";
 import { DEFAULT_SETTINGS, type Theme } from "./types/app";
@@ -48,6 +49,10 @@ onUnmounted(() => {
       :now="now"
       :container-size="containerSize"
       :movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
+    />
+    <TimerDisplay
+      :work-duration-minutes="DEFAULT_SETTINGS.workDurationMinutes"
+      :break-duration-minutes="DEFAULT_SETTINGS.breakDurationMinutes"
     />
     <button
       class="theme-toggle"
