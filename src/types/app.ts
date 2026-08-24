@@ -9,7 +9,7 @@ export interface AppSettings {
   theme: Theme;
   changeColorOnBounce: boolean;
   /** 通常時に時計が画面を横断する秒数。値が小さいほど速く移動する。 */
-  traversalDurationSeconds: number;
+  movementSpeedPixelsPerSecond: number;
 }
 
 export const DEFAULT_SETTINGS: Readonly<AppSettings> = {
@@ -18,7 +18,7 @@ export const DEFAULT_SETTINGS: Readonly<AppSettings> = {
   soundEnabled: false,
   theme: "dark",
   changeColorOnBounce: false,
-  traversalDurationSeconds: 60,
+  movementSpeedPixelsPerSecond: 80,
 };
 
 export const SETTINGS_LIMITS = {
