@@ -48,6 +48,8 @@ body {
 .clock-block {
   width: min(100%, 1100px);
   text-align: center;
+  pointer-events: none;
+  user-select: none;
 }
 .clock-motion {
   position: absolute;
