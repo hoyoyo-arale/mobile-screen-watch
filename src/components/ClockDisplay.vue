@@ -7,6 +7,7 @@ import { useClockMotion } from "../composables/useClockMotion";
 interface Props {
   now: Date;
   containerSize: MotionBounds;
+  movementSpeedPixelsPerSecond: number;
 }
 
 const props = defineProps<Props>();
@@ -19,6 +20,7 @@ const isoDate = computed(() => toIsoDate(props.now));
 const { motionStyle } = useClockMotion(
   motionElement,
   toRef(props, "containerSize"),
+  toRef(props, "movementSpeedPixelsPerSecond"),
 );
 </script>
 

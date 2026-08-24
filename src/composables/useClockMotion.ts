@@ -2,6 +2,7 @@ import { computed, onMounted, onUnmounted, ref, type Ref, watch } from "vue";
 import {
   advanceMotion,
   createVelocity,
+  setMotionSpeed,
   type MotionBounds,
   type MotionState,
 } from "../logic/motion";
@@ -9,11 +10,12 @@ import {
 export const useClockMotion = (
   motionElement: Readonly<Ref<HTMLElement | null>>,
   containerSize: Readonly<Ref<MotionBounds>>,
+  speed: Readonly<Ref<number>>,
 ) => {
   const motion = ref<MotionState>({
     x: 0,
     y: 0,
-    ...createVelocity(80, Math.PI / 4),
+    ...createVelocity(speed.value, Math.PI / 4),
   });
   const bounds = ref<MotionBounds>({ width: 0, height: 0 });
   let animationFrameId: number | undefined;
@@ -48,6 +50,9 @@ export const useClockMotion = (
   };
 
   watch(containerSize, updateBounds);
+  watch(speed, (nextSpeed) => {
+    motion.value = setMotionSpeed(motion.value, nextSpeed);
+  });
 
   const animate = (timestamp: number) => {
     if (previousTimestamp === undefined) previousTimestamp = timestamp;

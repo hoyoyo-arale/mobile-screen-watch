@@ -3,10 +3,13 @@ import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 import ClockDisplay from "./components/ClockDisplay.vue";
 import { toggleTheme as getNextTheme } from "./logic/theme";
 import type { MotionBounds } from "./logic/motion";
-import type { Theme } from "./types/app";
+import { DEFAULT_SETTINGS, type Theme } from "./types/app";
 
 const now = ref(new Date());
 const theme = ref<Theme>("dark");
+const movementSpeedPixelsPerSecond = ref(
+  DEFAULT_SETTINGS.movementSpeedPixelsPerSecond,
+);
 const screenElement = useTemplateRef<HTMLElement>("screenElement");
 const containerSize = ref<MotionBounds>({ width: 0, height: 0 });
 let clockInterval: number | undefined;
@@ -41,7 +44,11 @@ onUnmounted(() => {
 </script>
 <template>
   <main ref="screenElement" class="clock-screen" :class="`theme-${theme}`">
-    <ClockDisplay :now="now" :container-size="containerSize" />
+    <ClockDisplay
+      :now="now"
+      :container-size="containerSize"
+      :movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
+    />
     <button
       class="theme-toggle"
       type="button"

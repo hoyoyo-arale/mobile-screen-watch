@@ -25,6 +25,24 @@ export const createVelocity = (
   };
 };
 
+/** 速度の向きを維持したまま、速度の大きさだけを変更する。 */
+export const setMotionSpeed = (
+  state: MotionState,
+  speed: number,
+): MotionState => {
+  if (speed < 0) {
+    throw new RangeError("speed must be zero or greater");
+  }
+
+  const currentSpeed = Math.hypot(state.vx, state.vy);
+  if (currentSpeed === 0) {
+    return { ...state, ...createVelocity(speed, Math.PI / 4) };
+  }
+
+  const ratio = speed / currentSpeed;
+  return { ...state, vx: state.vx * ratio, vy: state.vy * ratio };
+};
+
 interface AxisMotion {
   position: number;
   velocity: number;
