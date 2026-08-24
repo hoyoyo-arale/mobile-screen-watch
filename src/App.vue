@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 import ClockDisplay from "./components/ClockDisplay.vue";
+import MenuBar from "./components/MenuBar.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import { toggleTheme as getNextTheme } from "./logic/theme";
 import type { MotionBounds } from "./logic/motion";
@@ -11,6 +12,7 @@ const theme = ref<Theme>("dark");
 const movementSpeedPixelsPerSecond = ref(
   DEFAULT_SETTINGS.movementSpeedPixelsPerSecond,
 );
+const isMenuOpen = ref(false);
 const screenElement = useTemplateRef<HTMLElement>("screenElement");
 const containerSize = ref<MotionBounds>({ width: 0, height: 0 });
 let clockInterval: number | undefined;
@@ -18,6 +20,10 @@ let resizeObserver: ResizeObserver | undefined;
 
 const handleThemeToggle = () => {
   theme.value = getNextTheme(theme.value);
+};
+
+const handleScreenTap = () => {
+  isMenuOpen.value = !isMenuOpen.value;
 };
 
 const updateContainerSize = () => {
@@ -44,7 +50,12 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <main ref="screenElement" class="clock-screen" :class="`theme-${theme}`">
+  <main
+    ref="screenElement"
+    class="clock-screen"
+    :class="`theme-${theme}`"
+    @click="handleScreenTap"
+  >
     <ClockDisplay
       :now="now"
       :container-size="containerSize"
@@ -65,5 +76,11 @@ onUnmounted(() => {
     >
       {{ theme === "dark" ? "ライト" : "ダーク" }}
     </button>
+    <MenuBar
+      :open="isMenuOpen"
+      @close="isMenuOpen = false"
+      @open-settings="isMenuOpen = false"
+      @start-timer="isMenuOpen = false"
+    />
   </main>
 </template>
