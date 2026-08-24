@@ -26,6 +26,34 @@ describe("advanceMotion", () => {
     });
   });
 
+  it("keeps moving in the negative direction before reaching an edge", () => {
+    expect(
+      advanceMotion({ x: 50, y: 0, vx: -10, vy: 0 }, 0.1, {
+        width: 100,
+        height: 0,
+      }),
+    ).toEqual({
+      x: 49,
+      y: 0,
+      vx: -10,
+      vy: 0,
+    });
+  });
+
+  it("reverses negative velocity after reflecting from the left edge", () => {
+    expect(
+      advanceMotion({ x: 1, y: 0, vx: -10, vy: 0 }, 0.2, {
+        width: 100,
+        height: 0,
+      }),
+    ).toEqual({
+      x: 1,
+      y: 0,
+      vx: 10,
+      vy: 0,
+    });
+  });
+
   it("reflects from the right and bottom edges", () => {
     expect(advanceMotion(initialState, 3.25, bounds)).toEqual({
       x: 92.5,

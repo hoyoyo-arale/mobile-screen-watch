@@ -61,7 +61,7 @@ const advanceAxis = (
     position: isMovingForward
       ? wrappedPosition
       : 2 * maxPosition - wrappedPosition,
-    velocity: (isMovingForward ? direction : -direction) * speed,
+    velocity: (isMovingForward ? 1 : -1) * speed,
   };
 };
 
