@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { advanceMotion, createVelocity, type MotionState } from "./motion";
+import {
+  advanceMotion,
+  createVelocity,
+  setMotionSpeed,
+  type MotionState,
+} from "./motion";
 
 const initialState: MotionState = { x: 10, y: 20, vx: 30, vy: 40 };
 const bounds = { width: 100, height: 80 };
@@ -13,6 +18,25 @@ describe("createVelocity", () => {
 
   it("rejects a negative speed", () => {
     expect(() => createVelocity(-1, 0)).toThrow(RangeError);
+  });
+});
+
+describe("setMotionSpeed", () => {
+  it("changes speed while preserving direction", () => {
+    const state = { x: 0, y: 0, vx: 3, vy: 4 };
+
+    expect(setMotionSpeed(state, 10)).toEqual({
+      x: 0,
+      y: 0,
+      vx: 6,
+      vy: 8,
+    });
+  });
+
+  it("rejects a negative speed", () => {
+    expect(() => setMotionSpeed({ x: 0, y: 0, vx: 1, vy: 0 }, -1)).toThrow(
+      RangeError,
+    );
   });
 });
 

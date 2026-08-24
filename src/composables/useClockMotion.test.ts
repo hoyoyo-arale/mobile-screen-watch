@@ -10,12 +10,17 @@ const Host = defineComponent({
       type: Object as PropType<MotionBounds>,
       required: true,
     },
+    speed: {
+      type: Number,
+      required: true,
+    },
   },
   setup(props) {
     const element = ref<HTMLElement | null>(null);
     const { motionStyle } = useClockMotion(
       element,
       toRef(props, "containerSize"),
+      toRef(props, "speed"),
     );
 
     return { element, motionStyle };
@@ -60,7 +65,7 @@ describe("useClockMotion lifecycle", () => {
 
   it("starts animation and observes the element when mounted", () => {
     const wrapper = mount(Host, {
-      props: { containerSize: { width: 320, height: 480 } },
+      props: { containerSize: { width: 320, height: 480 }, speed: 80 },
     });
 
     expect(requestAnimationFrame).toHaveBeenCalledOnce();
@@ -72,7 +77,7 @@ describe("useClockMotion lifecycle", () => {
 
   it("updates the transform on the next animation frame", async () => {
     const wrapper = mount(Host, {
-      props: { containerSize: { width: 320, height: 480 } },
+      props: { containerSize: { width: 320, height: 480 }, speed: 80 },
     });
     const element = wrapper.vm.element as HTMLElement;
 
@@ -87,7 +92,7 @@ describe("useClockMotion lifecycle", () => {
 
   it("cancels animation and disconnects the observer when unmounted", () => {
     const wrapper = mount(Host, {
-      props: { containerSize: { width: 320, height: 480 } },
+      props: { containerSize: { width: 320, height: 480 }, speed: 80 },
     });
 
     wrapper.unmount();
