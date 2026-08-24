@@ -49,6 +49,12 @@ body {
   width: min(100%, 1100px);
   text-align: center;
 }
+.clock-motion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
 .clock-time {
   display: inline-flex;
   align-items: baseline;
