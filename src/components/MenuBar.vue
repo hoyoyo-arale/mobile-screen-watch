@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onUnmounted, watch } from "vue";
+import type { Theme } from "../types/app";
 
 interface Props {
   open: boolean;
+  theme: Theme;
 }
 
 const props = defineProps<Props>();
@@ -10,6 +12,7 @@ const emit = defineEmits<{
   close: [];
   openSettings: [];
   startTimer: [];
+  toggleTheme: [];
 }>();
 
 let hideTimeout: number | undefined;
@@ -46,6 +49,19 @@ onUnmounted(() => {
     <Transition name="menu-sheet">
       <div v-if="open" id="clock-menu" class="menu-panel" @click.stop>
         <button type="button" @click="emit('startTimer')">作業開始</button>
+        <button
+          class="theme-toggle"
+          type="button"
+          :aria-label="
+            theme === 'dark'
+              ? 'ライトテーマに切り替え'
+              : 'ダークテーマに切り替え'
+          "
+          :aria-pressed="theme === 'light'"
+          @click="emit('toggleTheme')"
+        >
+          {{ theme === "dark" ? "ライト" : "ダーク" }}
+        </button>
         <button type="button" @click="emit('openSettings')">設定</button>
       </div>
     </Transition>
@@ -88,6 +104,17 @@ onUnmounted(() => {
     var(--primary-text) 10%,
     var(--screen-background)
   );
+}
+.theme-toggle {
+  opacity: 0.75;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease;
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  opacity: 1;
 }
 .menu-sheet-enter-active,
 .menu-sheet-leave-active {

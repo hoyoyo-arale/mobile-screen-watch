@@ -65,22 +65,13 @@ onUnmounted(() => {
       :work-duration-minutes="DEFAULT_SETTINGS.workDurationMinutes"
       :break-duration-minutes="DEFAULT_SETTINGS.breakDurationMinutes"
     />
-    <button
-      class="theme-toggle"
-      type="button"
-      :aria-label="
-        theme === 'dark' ? 'ライトテーマに切り替え' : 'ダークテーマに切り替え'
-      "
-      :aria-pressed="theme === 'light'"
-      @click="handleThemeToggle"
-    >
-      {{ theme === "dark" ? "ライト" : "ダーク" }}
-    </button>
     <MenuBar
       :open="isMenuOpen"
+      :theme="theme"
       @close="isMenuOpen = false"
       @open-settings="isMenuOpen = false"
       @start-timer="isMenuOpen = false"
+      @toggle-theme="handleThemeToggle"
     />
   </main>
 </template>
