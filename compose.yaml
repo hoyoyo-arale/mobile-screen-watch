@@ -22,12 +22,21 @@ services:
       # ボリュームを共有するので、一度ログインすればどのプロジェクトの
       # コンテナからでも再ログイン不要になる。
       - codex-home:/home/${USERNAME:-codex}/.codex
+      # claude login の認証情報(~/.claude/.credentials.json)や settings.json、
+      # プロジェクト履歴などを永続化する。
+      - claude-home:/home/${USERNAME:-codex}/.claude
+      # Antigravity CLI(agy)の設定・認証情報(~/.gemini/antigravity-cli/ 配下)を永続化する。
+      # ただし認証トークンはLinuxのSecret Service(D-Bus/keyring)経由で保存される場合があり、
+      # コンテナ内にkeyringデーモンが無いと再ログインが必要になる可能性がある(要検証)。
+      - gemini-home:/home/${USERNAME:-codex}/.gemini
     working_dir: /workspace
-    ports:
-      - "5173:5173"
     tty: true
     stdin_open: true
 
 volumes:
   codex-home:
-    name: codex-cli-homes
+    name: codex-cli-home
+  claude-home:
+    name: claude-cli-home
+  gemini-home:
+    name: gemini-cli-home

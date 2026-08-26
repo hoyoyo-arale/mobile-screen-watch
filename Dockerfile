@@ -42,6 +42,8 @@ ENV HOME=/home/${USERNAME} \
     PATH=/home/${USERNAME}/.local/bin:$PATH
 
 RUN curl -fsSL https://chatgpt.com/codex/install.sh | sh
+RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN curl -fsSL https://antigravity.google/cli/install.sh | bash
 
 WORKDIR /workspace
 
