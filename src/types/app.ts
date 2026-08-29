@@ -33,6 +33,10 @@ export const NIGHT_MODE = {
   speedRatio: 0.5,
 } as const;
 
+export const UI_TIMINGS = {
+  menuAutoHideDurationMs: 5_000,
+} as const;
+
 export type TimerState =
   | { status: "idle" }
   | {

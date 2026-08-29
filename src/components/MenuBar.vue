@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { onUnmounted, watch } from "vue";
-import type { Theme } from "../types/app";
+import { UI_TIMINGS, type Theme } from "../types/app";
 
 interface Props {
   open: boolean;
   theme: Theme;
+  autoHideDurationMs?: number;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  autoHideDurationMs: UI_TIMINGS.menuAutoHideDurationMs,
+});
 const emit = defineEmits<{
   close: [];
   open: [];
@@ -20,7 +23,10 @@ let hideTimeout: number | undefined;
 
 const scheduleHide = () => {
   if (hideTimeout !== undefined) window.clearTimeout(hideTimeout);
-  hideTimeout = window.setTimeout(() => emit("close"), 5_000);
+  hideTimeout = window.setTimeout(
+    () => emit("close"),
+    props.autoHideDurationMs,
+  );
 };
 
 watch(
