@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
 import { page } from "vitest/browser";
 import { render } from "vitest-browser-vue";
-import App from "./App.vue";
-import "./style.css";
+import App from "../../src/App.vue";
+import "../../src/style.css";
 
 test("opens the previewed menu and closes it from outside", async () => {
   const screen = await render(App);
