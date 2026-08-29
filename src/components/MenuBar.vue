@@ -4,13 +4,13 @@ import type { Theme } from "../types/app";
 
 interface Props {
   open: boolean;
-  peek: boolean;
   theme: Theme;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
   close: [];
+  open: [];
   openSettings: [];
   startTimer: [];
   toggleTheme: [];
@@ -40,53 +40,68 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <nav
-    class="menu-bar"
-    :class="{
-      'menu-bar--peek': peek && !open,
-      'menu-bar--open': open,
-    }"
-    aria-label="操作メニュー"
-    @pointerenter="handleInteraction"
-    @focusin="handleInteraction"
-  >
-    <div
-      id="clock-menu"
-      class="menu-panel"
-      :aria-hidden="!open"
-      :inert="!open"
-      @click.stop
+  <div class="menu-hover-area" :class="{ 'menu-hover-area--open': open }">
+    <nav
+      class="menu-bar"
+      :class="{ 'menu-bar--open': open }"
+      aria-label="操作メニュー"
+      @pointerenter="handleInteraction"
+      @focusin="handleInteraction"
     >
-      <button type="button" @click="emit('startTimer')">作業開始</button>
       <button
-        class="theme-toggle"
+        v-if="!open"
+        class="menu-peek-trigger"
         type="button"
-        :aria-label="
-          theme === 'dark' ? 'ライトテーマに切り替え' : 'ダークテーマに切り替え'
-        "
-        :aria-pressed="theme === 'light'"
-        @click="emit('toggleTheme')"
+        tabindex="-1"
+        aria-label="操作メニューを開く"
+        @click.stop="emit('open')"
+      />
+      <div
+        id="clock-menu"
+        class="menu-panel"
+        :aria-hidden="!open"
+        :inert="!open"
+        @click.stop
       >
-        {{ theme === "dark" ? "ライト" : "ダーク" }}
-      </button>
-      <button type="button" @click="emit('openSettings')">設定</button>
-    </div>
-  </nav>
+        <button type="button" @click="emit('startTimer')">作業開始</button>
+        <button
+          class="theme-toggle"
+          type="button"
+          :aria-label="
+            theme === 'dark'
+              ? 'ライトテーマに切り替え'
+              : 'ダークテーマに切り替え'
+          "
+          :aria-pressed="theme === 'light'"
+          @click="emit('toggleTheme')"
+        >
+          {{ theme === "dark" ? "ライト" : "ダーク" }}
+        </button>
+        <button type="button" @click="emit('openSettings')">設定</button>
+      </div>
+    </nav>
+  </div>
 </template>
 
 <style scoped>
+.menu-hover-area {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  height: 0;
+  pointer-events: none;
+}
 .menu-bar {
   --menu-bottom-gap: max(24px, env(safe-area-inset-bottom));
   position: fixed;
   right: 10%;
   bottom: var(--menu-bottom-gap);
   left: 10%;
-  z-index: 2;
+  pointer-events: auto;
   transform: translateY(calc(100% + var(--menu-bottom-gap)));
   transition: transform 180ms ease;
-}
-.menu-bar--peek {
-  transform: translateY(calc(100% + var(--menu-bottom-gap) - 16px));
 }
 .menu-bar--open {
   transform: translateY(0);
@@ -102,6 +117,24 @@ onUnmounted(() => {
   border-radius: 16px;
   background: var(--screen-background);
   box-shadow: 0 8px 24px rgb(0 0 0 / 20%);
+}
+.menu-peek-trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .menu-hover-area:not(.menu-hover-area--open) {
+    height: 100px;
+    pointer-events: auto;
+  }
+  .menu-hover-area:hover .menu-bar:not(.menu-bar--open) {
+    transform: translateY(calc(100% + var(--menu-bottom-gap) - 16px));
+  }
 }
 .menu-panel button {
   border: 1px solid var(--control-border);
