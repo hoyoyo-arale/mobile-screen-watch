@@ -81,6 +81,12 @@ onUnmounted(() => {
       :work-duration-minutes="DEFAULT_SETTINGS.workDurationMinutes"
       :break-duration-minutes="DEFAULT_SETTINGS.breakDurationMinutes"
     />
+    <div
+      v-if="isMenuOpen"
+      class="menu-backdrop"
+      aria-hidden="true"
+      @click.stop="handleMenuClose"
+    />
     <MenuBar
       :open="isMenuOpen"
       :theme="theme"
@@ -92,3 +98,11 @@ onUnmounted(() => {
     />
   </main>
 </template>
+
+<style scoped>
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+}
+</style>
