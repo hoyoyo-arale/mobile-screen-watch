@@ -5,10 +5,12 @@ import { UI_TIMINGS, type Theme } from "../types/app";
 interface Props {
   open: boolean;
   theme: Theme;
+  previewDurationMs?: number;
   autoHideDurationMs?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  previewDurationMs: UI_TIMINGS.menuPreviewDurationMs,
   autoHideDurationMs: UI_TIMINGS.menuAutoHideDurationMs,
 });
 const emit = defineEmits<{
@@ -24,46 +26,92 @@ const isPreviewVisible = ref(false);
 const canShowPreview = ref(true);
 let previewTimeout: number | undefined;
 
+const clearHideTimeout = () => {
+  if (hideTimeout === undefined) return;
+  window.clearTimeout(hideTimeout);
+  hideTimeout = undefined;
+};
+
 const scheduleHide = () => {
-  if (hideTimeout !== undefined) window.clearTimeout(hideTimeout);
+  clearHideTimeout();
   hideTimeout = window.setTimeout(
     () => emit("close"),
     props.autoHideDurationMs,
   );
 };
 
+const clearPreviewTimeout = () => {
+  if (previewTimeout === undefined) return;
+  window.clearTimeout(previewTimeout);
+  previewTimeout = undefined;
+};
+
+const hidePreview = () => {
+  clearPreviewTimeout();
+  isPreviewVisible.value = false;
+};
+
+const handlePreviewEnter = () => {
+  if (props.open || !canShowPreview.value) return;
+
+  isPreviewVisible.value = true;
+  clearPreviewTimeout();
+  previewTimeout = window.setTimeout(() => {
+    isPreviewVisible.value = false;
+    canShowPreview.value = false;
+    previewTimeout = undefined;
+  }, props.previewDurationMs);
+};
+
+const handlePreviewLeave = () => {
+  if (props.open) return;
+
+  hidePreview();
+  canShowPreview.value = true;
+};
+
+const handlePreviewOpen = () => {
+  hidePreview();
+  canShowPreview.value = false;
+  emit("open");
+};
+
 watch(
   () => props.open,
   (open) => {
+    clearHideTimeout();
     if (open) scheduleHide();
   },
 );
 
-const handleInteraction = () => {
-  scheduleHide();
-};
-
 onUnmounted(() => {
-  if (hideTimeout !== undefined) window.clearTimeout(hideTimeout);
+  clearHideTimeout();
+  clearPreviewTimeout();
 });
 </script>
 
 <template>
-  <div class="menu-hover-area" :class="{ 'menu-hover-area--open': open }">
+  <div
+    class="menu-hover-area"
+    :class="{ 'menu-hover-area--open': open }"
+    @pointerenter="handlePreviewEnter"
+    @pointerleave="handlePreviewLeave"
+  >
     <nav
       class="menu-bar"
-      :class="{ 'menu-bar--open': open }"
+      :class="{
+        'menu-bar--preview': isPreviewVisible,
+        'menu-bar--open': open,
+      }"
       aria-label="操作メニュー"
-      @pointerenter="handleInteraction"
-      @focusin="handleInteraction"
     >
       <button
-        v-if="!open"
+        v-if="isPreviewVisible && !open"
         class="menu-peek-trigger"
         type="button"
         tabindex="-1"
         aria-label="操作メニューを開く"
-        @click.stop="emit('open')"
+        @click.stop="handlePreviewOpen"
       />
       <div
         id="clock-menu"
@@ -112,6 +160,9 @@ onUnmounted(() => {
   transform: translateY(calc(100% + var(--menu-bottom-gap)));
   transition: transform 180ms ease;
 }
+.menu-bar--preview {
+  transform: translateY(calc(100% + var(--menu-bottom-gap) - 16px));
+}
 .menu-bar--open {
   transform: translateY(0);
 }
@@ -140,9 +191,6 @@ onUnmounted(() => {
   .menu-hover-area:not(.menu-hover-area--open) {
     height: 100px;
     pointer-events: auto;
-  }
-  .menu-hover-area:hover .menu-bar:not(.menu-bar--open) {
-    transform: translateY(calc(100% + var(--menu-bottom-gap) - 16px));
   }
 }
 .menu-panel button {

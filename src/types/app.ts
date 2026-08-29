@@ -34,7 +34,8 @@ export const NIGHT_MODE = {
 } as const;
 
 export const UI_TIMINGS = {
-  menuAutoHideDurationMs: 5_000,
+  menuPreviewDurationMs: 30_000,
+  menuAutoHideDurationMs: 30_000,
 } as const;
 
 export type TimerState =
