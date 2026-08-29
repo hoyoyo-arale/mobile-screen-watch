@@ -4,6 +4,7 @@ import type { Theme } from "../types/app";
 
 interface Props {
   open: boolean;
+  peek: boolean;
   theme: Theme;
 }
 
@@ -41,40 +42,54 @@ onUnmounted(() => {
 <template>
   <nav
     class="menu-bar"
-    :class="{ 'menu-bar--open': open }"
+    :class="{
+      'menu-bar--peek': peek && !open,
+      'menu-bar--open': open,
+    }"
     aria-label="操作メニュー"
     @pointerenter="handleInteraction"
     @focusin="handleInteraction"
   >
-    <Transition name="menu-sheet">
-      <div v-if="open" id="clock-menu" class="menu-panel" @click.stop>
-        <button type="button" @click="emit('startTimer')">作業開始</button>
-        <button
-          class="theme-toggle"
-          type="button"
-          :aria-label="
-            theme === 'dark'
-              ? 'ライトテーマに切り替え'
-              : 'ダークテーマに切り替え'
-          "
-          :aria-pressed="theme === 'light'"
-          @click="emit('toggleTheme')"
-        >
-          {{ theme === "dark" ? "ライト" : "ダーク" }}
-        </button>
-        <button type="button" @click="emit('openSettings')">設定</button>
-      </div>
-    </Transition>
+    <div
+      id="clock-menu"
+      class="menu-panel"
+      :aria-hidden="!open"
+      :inert="!open"
+      @click.stop
+    >
+      <button type="button" @click="emit('startTimer')">作業開始</button>
+      <button
+        class="theme-toggle"
+        type="button"
+        :aria-label="
+          theme === 'dark' ? 'ライトテーマに切り替え' : 'ダークテーマに切り替え'
+        "
+        :aria-pressed="theme === 'light'"
+        @click="emit('toggleTheme')"
+      >
+        {{ theme === "dark" ? "ライト" : "ダーク" }}
+      </button>
+      <button type="button" @click="emit('openSettings')">設定</button>
+    </div>
   </nav>
 </template>
 
 <style scoped>
 .menu-bar {
+  --menu-bottom-gap: max(24px, env(safe-area-inset-bottom));
   position: fixed;
   right: 10%;
-  bottom: max(24px, env(safe-area-inset-bottom));
+  bottom: var(--menu-bottom-gap);
   left: 10%;
   z-index: 2;
+  transform: translateY(calc(100% + var(--menu-bottom-gap)));
+  transition: transform 180ms ease;
+}
+.menu-bar--peek {
+  transform: translateY(calc(100% + var(--menu-bottom-gap) - 16px));
+}
+.menu-bar--open {
+  transform: translateY(0);
 }
 .menu-panel {
   width: 100%;
@@ -116,17 +131,8 @@ onUnmounted(() => {
 .theme-toggle:focus-visible {
   opacity: 1;
 }
-.menu-sheet-enter-active,
-.menu-sheet-leave-active {
-  transition: transform 180ms ease;
-}
-.menu-sheet-enter-from,
-.menu-sheet-leave-to {
-  transform: translateY(100%);
-}
 @media (prefers-reduced-motion: reduce) {
-  .menu-sheet-enter-active,
-  .menu-sheet-leave-active {
+  .menu-bar {
     transition-duration: 0ms;
   }
 }
