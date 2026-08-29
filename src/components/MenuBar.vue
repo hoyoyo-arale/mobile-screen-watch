@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onUnmounted, watch } from "vue";
+import { onUnmounted, ref, watch } from "vue";
 import { UI_TIMINGS, type Theme } from "../types/app";
 
 interface Props {
@@ -20,6 +20,9 @@ const emit = defineEmits<{
 }>();
 
 let hideTimeout: number | undefined;
+const isPreviewVisible = ref(false);
+const canShowPreview = ref(true);
+let previewTimeout: number | undefined;
 
 const scheduleHide = () => {
   if (hideTimeout !== undefined) window.clearTimeout(hideTimeout);
