@@ -4,6 +4,7 @@ import {
   durationMinutesToMilliseconds,
   getNextPhase,
   getRemainingMilliseconds,
+  getTimerPrimaryAction,
   isTimerExpired,
   pauseTimer,
   resumeTimer,
@@ -12,6 +13,32 @@ import {
 
 describe("timer logic", () => {
   const now = 1_000_000;
+
+  it("selects the primary action for each timer state", () => {
+    expect(getTimerPrimaryAction({ status: "idle" })).toBe("start");
+    expect(
+      getTimerPrimaryAction({
+        status: "running",
+        phase: "work",
+        startedAt: now,
+        endAt: now + 60_000,
+      }),
+    ).toBe("pause");
+    expect(
+      getTimerPrimaryAction({
+        status: "paused",
+        phase: "break",
+        remainingMs: 30_000,
+      }),
+    ).toBe("resume");
+    expect(
+      getTimerPrimaryAction({
+        status: "completed",
+        phase: "work",
+        completedAt: now,
+      }),
+    ).toBeNull();
+  });
 
   it("converts minutes to milliseconds", () => {
     expect(durationMinutesToMilliseconds(2)).toBe(120_000);
