@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import breakCoffeeIconUrl from "../assets/icons/break-coffee.svg";
+import pausedIconUrl from "../assets/icons/paused.svg";
+import workHammerIconUrl from "../assets/icons/work-hammer.svg";
 import type { TimerPhase, TimerState } from "../types/app";
 
 interface Props {
@@ -15,8 +18,32 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <section class="timer-display" aria-label="タイマー">
-    <p class="timer-phase">{{ phase === "work" ? "作業" : "休憩" }}</p>
+  <section
+    class="timer-display"
+    :class="`timer-display--${phase}`"
+    aria-label="タイマー"
+  >
+    <span
+      class="timer-icons"
+      role="img"
+      :aria-label="`${phase === 'work' ? '作業' : '休憩'}${
+        state.status === 'paused' ? '、一時停止' : ''
+      }`"
+    >
+      <span
+        class="timer-icon"
+        :style="{
+          '--timer-icon-url': `url(&quot;${phase === 'work' ? workHammerIconUrl : breakCoffeeIconUrl}&quot;)`,
+        }"
+        aria-hidden="true"
+      ></span>
+      <span
+        v-if="state.status === 'paused'"
+        class="timer-icon"
+        :style="{ '--timer-icon-url': `url(&quot;${pausedIconUrl}&quot;)` }"
+        aria-hidden="true"
+      ></span>
+    </span>
     <time class="timer-time" :datetime="remainingText">{{
       remainingText
     }}</time>

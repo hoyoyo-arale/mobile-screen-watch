@@ -52,9 +52,24 @@ body {
   display: grid;
   justify-items: start;
   gap: 4px;
-  color: var(--primary-text);
+  color: var(--timer-color);
 }
-.timer-phase,
+.timer-display--work {
+  --timer-color: #5fa8ff;
+}
+.timer-display--break {
+  --timer-color: #58c989;
+}
+.timer-icons {
+  display: flex;
+  gap: 6px;
+}
+.timer-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: currentColor;
+  mask: var(--timer-icon-url) center / contain no-repeat;
+}
 .timer-status {
   margin: 0;
   color: var(--secondary-text);
