@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRef, useTemplateRef } from "vue";
-import { useClockMotion } from "../composables/useClockMotion";
+import { useDisplayMotion } from "../composables/useDisplayMotion";
 import type { MotionBounds } from "../logic/motion";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 const props = defineProps<Props>();
 const motionElement = useTemplateRef<HTMLElement>("motionElement");
 
-const { motionStyle } = useClockMotion(
+const { motionStyle } = useDisplayMotion(
   motionElement,
   toRef(props, "containerSize"),
   toRef(props, "movementSpeedPixelsPerSecond"),

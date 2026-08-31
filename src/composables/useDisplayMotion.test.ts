@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { defineComponent, nextTick, ref, toRef, type PropType } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { MotionBounds } from "../logic/motion";
-import { useClockMotion } from "./useClockMotion";
+import { useDisplayMotion } from "./useDisplayMotion";
 
 const Host = defineComponent({
   props: {
@@ -17,7 +17,7 @@ const Host = defineComponent({
   },
   setup(props) {
     const element = ref<HTMLElement | null>(null);
-    const { motionStyle } = useClockMotion(
+    const { motionStyle } = useDisplayMotion(
       element,
       toRef(props, "containerSize"),
       toRef(props, "speed"),
@@ -28,7 +28,7 @@ const Host = defineComponent({
   template: '<div ref="element" :style="motionStyle" />',
 });
 
-describe("useClockMotion lifecycle", () => {
+describe("useDisplayMotion lifecycle", () => {
   let animationCallbacks: FrameRequestCallback[];
   let resizeObserverInstance: {
     observe: ReturnType<typeof vi.fn>;

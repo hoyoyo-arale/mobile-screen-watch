@@ -7,7 +7,7 @@ import {
   type MotionState,
 } from "../logic/motion";
 
-export const useClockMotion = (
+export const useDisplayMotion = (
   motionElement: Readonly<Ref<HTMLElement | null>>,
   containerSize: Readonly<Ref<MotionBounds>>,
   speed: Readonly<Ref<number>>,
