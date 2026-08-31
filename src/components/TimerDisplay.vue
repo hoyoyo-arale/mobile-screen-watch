@@ -24,25 +24,21 @@ const isDevelopment = import.meta.env.DEV;
     :class="`timer-display--${phase}`"
     aria-label="タイマー"
   >
-    <span
-      class="timer-icons"
-      role="img"
-      :aria-label="`${phase === 'work' ? '作業' : '休憩'}${
-        state.status === 'paused' ? '、一時停止' : ''
-      }`"
-    >
+    <span class="timer-icons">
       <span
         class="timer-icon"
         :style="{
           '--timer-icon-url': `url(&quot;${phase === 'work' ? workHammerIconUrl : breakCoffeeIconUrl}&quot;)`,
         }"
-        aria-hidden="true"
+        role="img"
+        :aria-label="phase === 'work' ? '作業' : '休憩'"
       ></span>
       <span
         v-if="state.status === 'paused'"
         class="timer-icon"
         :style="{ '--timer-icon-url': `url(&quot;${pausedIconUrl}&quot;)` }"
-        aria-hidden="true"
+        role="img"
+        aria-label="一時停止"
       ></span>
     </span>
     <time class="timer-time" :datetime="remainingText">{{
