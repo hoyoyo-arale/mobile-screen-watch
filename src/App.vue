@@ -4,6 +4,7 @@ import ClockDisplay from "./components/ClockDisplay.vue";
 import MenuBar from "./components/MenuBar.vue";
 import MovingDisplayBlock from "./components/MovingDisplayBlock.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
+import { useTimer } from "./composables/useTimer";
 import { toggleTheme as getNextTheme } from "./logic/theme";
 import type { MotionBounds } from "./logic/motion";
 import { DEFAULT_SETTINGS, type Theme } from "./types/app";
@@ -13,6 +14,15 @@ const theme = ref<Theme>("dark");
 const movementSpeedPixelsPerSecond = ref(
   DEFAULT_SETTINGS.movementSpeedPixelsPerSecond,
 );
+const workDurationMinutes = ref(DEFAULT_SETTINGS.workDurationMinutes);
+const breakDurationMinutes = ref(DEFAULT_SETTINGS.breakDurationMinutes);
+const {
+  state: timerState,
+  phase: timerPhase,
+  remainingText,
+  statusText,
+  handlePrimaryAction,
+} = useTimer(workDurationMinutes, breakDurationMinutes);
 const isMenuOpen = ref(false);
 const screenElement = useTemplateRef<HTMLElement>("screenElement");
 const containerSize = ref<MotionBounds>({ width: 0, height: 0 });
@@ -80,8 +90,11 @@ onUnmounted(() => {
       <ClockDisplay :now="now" />
     </MovingDisplayBlock>
     <TimerDisplay
-      :work-duration-minutes="DEFAULT_SETTINGS.workDurationMinutes"
-      :break-duration-minutes="DEFAULT_SETTINGS.breakDurationMinutes"
+      :state="timerState"
+      :phase="timerPhase"
+      :remaining-text="remainingText"
+      :status-text="statusText"
+      @primary-action="handlePrimaryAction"
     />
     <div
       v-if="isMenuOpen"

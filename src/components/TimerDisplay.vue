@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { toRef } from "vue";
-import { useTimer } from "../composables/useTimer";
+import type { TimerPhase, TimerState } from "../types/app";
 
 interface Props {
-  workDurationMinutes: number;
-  breakDurationMinutes: number;
+  state: TimerState;
+  phase: TimerPhase;
+  remainingText: string;
+  statusText: string;
 }
 
-const props = defineProps<Props>();
-const { state, phase, remainingText, statusText, handlePrimaryAction } =
-  useTimer(
-    toRef(props, "workDurationMinutes"),
-    toRef(props, "breakDurationMinutes"),
-  );
+defineProps<Props>();
+const emit = defineEmits<{
+  primaryAction: [];
+}>();
 </script>
 
 <template>
@@ -22,7 +21,7 @@ const { state, phase, remainingText, statusText, handlePrimaryAction } =
       remainingText
     }}</time>
     <p class="timer-status" aria-live="polite">{{ statusText }}</p>
-    <button class="timer-action" type="button" @click="handlePrimaryAction">
+    <button class="timer-action" type="button" @click="emit('primaryAction')">
       {{
         state.status === "running"
           ? "一時停止"
