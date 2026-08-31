@@ -46,12 +46,10 @@ body {
   --control-border: rgb(37 35 33 / 35%);
 }
 .timer-display {
-  position: absolute;
-  bottom: max(24px, env(safe-area-inset-bottom));
-  left: max(24px, env(safe-area-inset-left));
   display: grid;
-  justify-items: start;
+  justify-items: center;
   gap: 4px;
+  margin-top: clamp(12px, 2.5vw, 24px);
   color: var(--timer-color);
 }
 .timer-display--work {

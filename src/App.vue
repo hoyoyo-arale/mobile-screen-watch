@@ -88,14 +88,14 @@ onUnmounted(() => {
       :movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
     >
       <ClockDisplay :now="now" />
+      <TimerDisplay
+        :state="timerState"
+        :phase="timerPhase"
+        :remaining-text="remainingText"
+        :status-text="statusText"
+        @primary-action="handlePrimaryAction"
+      />
     </MovingDisplayBlock>
-    <TimerDisplay
-      :state="timerState"
-      :phase="timerPhase"
-      :remaining-text="remainingText"
-      :status-text="statusText"
-      @primary-action="handlePrimaryAction"
-    />
     <div
       v-if="isMenuOpen"
       class="menu-backdrop"
