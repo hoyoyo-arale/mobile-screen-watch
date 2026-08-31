@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 import ClockDisplay from "./components/ClockDisplay.vue";
 import MenuBar from "./components/MenuBar.vue";
+import MovingDisplayBlock from "./components/MovingDisplayBlock.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import { toggleTheme as getNextTheme } from "./logic/theme";
 import type { MotionBounds } from "./logic/motion";
@@ -72,11 +73,12 @@ onUnmounted(() => {
     :class="`theme-${theme}`"
     @click="handleScreenTap"
   >
-    <ClockDisplay
-      :now="now"
+    <MovingDisplayBlock
       :container-size="containerSize"
       :movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
-    />
+    >
+      <ClockDisplay :now="now" />
+    </MovingDisplayBlock>
     <TimerDisplay
       :work-duration-minutes="DEFAULT_SETTINGS.workDurationMinutes"
       :break-duration-minutes="DEFAULT_SETTINGS.breakDurationMinutes"
