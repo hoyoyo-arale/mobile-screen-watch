@@ -2,7 +2,7 @@ import type { TimerPhase, TimerState } from "../types/app";
 
 const MILLISECONDS_PER_MINUTE = 60_000;
 
-export type TimerPrimaryAction = "start" | "pause" | "resume" | null;
+export type TimerPrimaryAction = "start" | "pause" | "resume";
 
 export const getTimerPrimaryAction = (
   state: TimerState,
@@ -15,7 +15,7 @@ export const getTimerPrimaryAction = (
     case "paused":
       return "resume";
     case "completed":
-      return null;
+      return "start";
   }
 };
 

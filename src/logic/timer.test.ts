@@ -37,7 +37,7 @@ describe("timer logic", () => {
         phase: "work",
         completedAt: now,
       }),
-    ).toBeNull();
+    ).toBe("start");
   });
 
   it("converts minutes to milliseconds", () => {
