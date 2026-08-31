@@ -1,28 +1,51 @@
 <script setup lang="ts">
-import { toRef } from "vue";
-import { useTimer } from "../composables/useTimer";
+import breakCoffeeIconUrl from "../assets/icons/break-coffee.svg";
+import pausedIconUrl from "../assets/icons/paused.svg";
+import workHammerIconUrl from "../assets/icons/work-hammer.svg";
+import type { TimerPhase, TimerState } from "../types/app";
 
 interface Props {
-  workDurationMinutes: number;
-  breakDurationMinutes: number;
+  state: TimerState;
+  phase: TimerPhase;
+  remainingText: string;
+  statusText: string;
 }
 
-const props = defineProps<Props>();
-const { state, phase, remainingText, statusText, handlePrimaryAction } =
-  useTimer(
-    toRef(props, "workDurationMinutes"),
-    toRef(props, "breakDurationMinutes"),
-  );
+defineProps<Props>();
+const emit = defineEmits<{
+  primaryAction: [];
+}>();
+const isDevelopment = import.meta.env.DEV;
 </script>
 
 <template>
-  <section class="timer-display" aria-label="タイマー">
-    <p class="timer-phase">{{ phase === "work" ? "作業" : "休憩" }}</p>
+  <section
+    class="timer-display"
+    :class="`timer-display--${phase}`"
+    aria-label="タイマー"
+  >
+    <span class="timer-icons">
+      <span
+        class="timer-icon"
+        :style="{
+          '--timer-icon-url': `url(&quot;${phase === 'work' ? workHammerIconUrl : breakCoffeeIconUrl}&quot;)`,
+        }"
+        role="img"
+        :aria-label="phase === 'work' ? '作業' : '休憩'"
+      ></span>
+      <span
+        v-if="state.status === 'paused'"
+        class="timer-icon"
+        :style="{ '--timer-icon-url': `url(&quot;${pausedIconUrl}&quot;)` }"
+        role="img"
+        aria-label="一時停止"
+      ></span>
+    </span>
     <time class="timer-time" :datetime="remainingText">{{
       remainingText
     }}</time>
     <p class="timer-status" aria-live="polite">{{ statusText }}</p>
-    <button class="timer-action" type="button" @click="handlePrimaryAction">
+    <button class="timer-action" type="button" @click="emit('primaryAction')">
       {{
         state.status === "running"
           ? "一時停止"
@@ -32,4 +55,40 @@ const { state, phase, remainingText, statusText, handlePrimaryAction } =
       }}
     </button>
   </section>
+  <Teleport to="body">
+    <aside
+      v-if="isDevelopment"
+      class="timer-icon-debug"
+      aria-label="タイマー状態アイコン確認"
+    >
+      <span class="timer-icon-debug__item timer-display--work">
+        <span
+          class="timer-icon"
+          :style="{
+            '--timer-icon-url': `url(&quot;${workHammerIconUrl}&quot;)`,
+          }"
+          aria-hidden="true"
+        ></span>
+        作業
+      </span>
+      <span class="timer-icon-debug__item timer-display--break">
+        <span
+          class="timer-icon"
+          :style="{
+            '--timer-icon-url': `url(&quot;${breakCoffeeIconUrl}&quot;)`,
+          }"
+          aria-hidden="true"
+        ></span>
+        休憩
+      </span>
+      <span class="timer-icon-debug__item">
+        <span
+          class="timer-icon"
+          :style="{ '--timer-icon-url': `url(&quot;${pausedIconUrl}&quot;)` }"
+          aria-hidden="true"
+        ></span>
+        一時停止
+      </span>
+    </aside>
+  </Teleport>
 </template>
