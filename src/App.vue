@@ -104,7 +104,6 @@ onUnmounted(() => {
         :phase="timerPhase"
         :remaining-text="remainingText"
         :status-text="statusText"
-        @primary-action="handlePrimaryAction"
       />
     </MovingDisplayBlock>
     <div
@@ -142,9 +141,6 @@ onUnmounted(() => {
 .clock-display-motion {
   z-index: 1;
   pointer-events: none;
-}
-:deep(.timer-action) {
-  pointer-events: auto;
 }
 .menu-backdrop {
   position: fixed;
