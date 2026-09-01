@@ -117,7 +117,6 @@ onUnmounted(() => {
       @close="handleMenuClose"
       @open="handleMenuOpen"
       @open-settings="handleMenuClose"
-      @start-timer="handleMenuClose"
       @toggle-theme="handleThemeToggle"
     />
   </main>
