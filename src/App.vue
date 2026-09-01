@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 import ClockDisplay from "./components/ClockDisplay.vue";
 import MenuBar from "./components/MenuBar.vue";
 import MovingDisplayBlock from "./components/MovingDisplayBlock.vue";
+import ScreenPrimaryControl from "./components/ScreenPrimaryControl.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import { useTimer } from "./composables/useTimer";
 import { getTimerPrimaryAction } from "./logic/timer";
@@ -86,13 +87,11 @@ onUnmounted(() => {
 </script>
 <template>
   <main ref="screenElement" class="clock-screen" :class="`theme-${theme}`">
-    <button
-      class="screen-primary-control"
-      type="button"
-      :aria-label="primaryActionLabel"
+    <ScreenPrimaryControl
+      :label="primaryActionLabel"
       :disabled="isMenuOpen"
-      @click="handlePrimaryAction"
-    ></button>
+      @activate="handlePrimaryAction"
+    />
     <MovingDisplayBlock
       class="clock-display-motion"
       :container-size="containerSize"
@@ -125,19 +124,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.screen-primary-control {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  cursor: pointer;
-}
-.screen-primary-control:focus-visible {
-  outline: 2px solid var(--primary-text);
-  outline-offset: -4px;
-}
 .clock-display-motion {
   z-index: 1;
   pointer-events: none;
