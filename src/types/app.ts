@@ -18,12 +18,13 @@ export const DEFAULT_SETTINGS: Readonly<AppSettings> = {
   soundEnabled: false,
   theme: "dark",
   changeColorOnBounce: false,
-  movementSpeedPixelsPerSecond: 200,
+  movementSpeedPixelsPerSecond: 15,
 };
 
-export const SETTINGS_LIMITS = {
-  workDurationMinutes: { min: 1, max: 180 },
-  breakDurationMinutes: { min: 1, max: 60 },
+export const SETTINGS_OPTIONS = {
+  workDurationMinutes: [45, 50, 60, 75],
+  breakDurationMinutes: [10, 15, 20],
+  movementSpeedPixelsPerSecond: [5, 10, 15, 25, 40],
 } as const;
 
 export const NIGHT_MODE = {
