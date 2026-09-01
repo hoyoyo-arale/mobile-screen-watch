@@ -12,9 +12,6 @@ interface Props {
 }
 
 defineProps<Props>();
-const emit = defineEmits<{
-  primaryAction: [];
-}>();
 const isDevelopment = import.meta.env.DEV;
 </script>
 
@@ -45,15 +42,6 @@ const isDevelopment = import.meta.env.DEV;
       remainingText
     }}</time>
     <p class="timer-status" aria-live="polite">{{ statusText }}</p>
-    <button class="timer-action" type="button" @click="emit('primaryAction')">
-      {{
-        state.status === "running"
-          ? "一時停止"
-          : state.status === "paused"
-            ? "再開"
-            : "開始"
-      }}
-    </button>
   </section>
   <Teleport to="body">
     <aside

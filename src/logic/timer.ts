@@ -2,6 +2,23 @@ import type { TimerPhase, TimerState } from "../types/app";
 
 const MILLISECONDS_PER_MINUTE = 60_000;
 
+export type TimerPrimaryAction = "start" | "pause" | "resume";
+
+export const getTimerPrimaryAction = (
+  state: TimerState,
+): TimerPrimaryAction => {
+  switch (state.status) {
+    case "idle":
+      return "start";
+    case "running":
+      return "pause";
+    case "paused":
+      return "resume";
+    case "completed":
+      return "start";
+  }
+};
+
 export const durationMinutesToMilliseconds = (minutes: number): number =>
   minutes * MILLISECONDS_PER_MINUTE;
 

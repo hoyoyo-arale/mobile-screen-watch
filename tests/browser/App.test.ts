@@ -43,7 +43,7 @@ test("shows the menu preview while hovering", async () => {
 
 test("opens the previewed menu and closes it from outside", async () => {
   const { hoverArea, menuPanel, previewButton, screen } = await renderMenu();
-  const workButton = screen.getByRole("button", { name: "作業開始" });
+  const workButton = menuPanel.getByRole("button", { name: "作業開始" });
 
   await hoverArea.hover();
   await previewButton.click();
