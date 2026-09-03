@@ -29,6 +29,20 @@ const renderMenu = async () => {
   return { hoverArea, menuBarElement, menuPanel, previewButton, screen };
 };
 
+const openSettings = async () => {
+  const rendered = await renderMenu();
+  const { hoverArea, menuPanel, previewButton, screen } = rendered;
+
+  await hoverArea.hover();
+  await previewButton.click();
+  await menuPanel.getByRole("button", { name: "設定" }).click();
+
+  const dialog = screen.getByRole("dialog", { name: "設定" });
+  await expect.element(dialog).toBeVisible();
+
+  return { ...rendered, dialog };
+};
+
 test("shows the menu preview while hovering", async () => {
   const { hoverArea, menuBarElement } = await renderMenu();
 
@@ -56,4 +70,29 @@ test("opens the previewed menu and closes it from outside", async () => {
 
   await page.elementLocator(backdropElement).click();
   await expect.element(menuPanel).toHaveAttribute("aria-hidden", "true");
+});
+
+test("opens settings from the menu and closes it from the frontmost button", async () => {
+  const { dialog } = await openSettings();
+
+  await dialog.getByRole("button", { name: "閉じる" }).click();
+
+  await expect.element(dialog).not.toBeInTheDocument();
+});
+
+test("does not activate the screen timer control while settings is open", async () => {
+  const { screen } = await openSettings();
+  const primaryControl = screen.getByRole("button", { name: "作業開始" });
+
+  await expect.element(primaryControl).toBeDisabled();
+
+  const primaryControlElement = primaryControl.element();
+  if (!(primaryControlElement instanceof HTMLButtonElement)) {
+    throw new Error("Screen primary control was not rendered as a button");
+  }
+  primaryControlElement.click();
+
+  await expect
+    .poll(() => primaryControlElement.getAttribute("aria-label"))
+    .toBe("作業開始");
 });
