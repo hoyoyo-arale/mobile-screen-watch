@@ -23,3 +23,10 @@ const emit = defineEmits<{
     </header>
   </section>
 </template>
+
+<style scoped>
+.settings-panel {
+  position: relative;
+  z-index: 5;
+}
+</style>
