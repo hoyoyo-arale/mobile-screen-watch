@@ -216,7 +216,7 @@ onUnmounted(() => {
   bottom: 0;
   left: 0;
   z-index: 2;
-  height: 24px;
+  height: clamp(32px, 6dvh, 48px);
   pointer-events: none;
   touch-action: none;
 }

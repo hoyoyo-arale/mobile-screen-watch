@@ -1,5 +1,7 @@
 export const MENU_SWIPE_THRESHOLDS = {
-  startAreaHeight: 24,
+  startAreaViewportRatio: 0.06,
+  minimumStartAreaHeight: 32,
+  maximumStartAreaHeight: 48,
   previewDistance: 12,
   openDistance: 48,
 } as const;
@@ -11,11 +13,20 @@ export interface PointerPosition {
   y: number;
 }
 
+export const getMenuSwipeStartAreaHeight = (viewportHeight: number): number =>
+  Math.min(
+    MENU_SWIPE_THRESHOLDS.maximumStartAreaHeight,
+    Math.max(
+      MENU_SWIPE_THRESHOLDS.minimumStartAreaHeight,
+      viewportHeight * MENU_SWIPE_THRESHOLDS.startAreaViewportRatio,
+    ),
+  );
+
 export const isMenuSwipeStart = (
   pointerY: number,
   viewportHeight: number,
 ): boolean =>
-  pointerY >= viewportHeight - MENU_SWIPE_THRESHOLDS.startAreaHeight &&
+  pointerY >= viewportHeight - getMenuSwipeStartAreaHeight(viewportHeight) &&
   pointerY <= viewportHeight;
 
 export const getMenuSwipeStage = (
