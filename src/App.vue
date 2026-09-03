@@ -163,7 +163,7 @@ onUnmounted(() => {
       :container-size="containerSize"
       :movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
     >
-      <ClockDisplay :now="now" />
+      <ClockDisplay :now="now" :show-seconds="showClockSeconds" />
       <TimerDisplay
         :state="timerState"
         :phase="timerPhase"
