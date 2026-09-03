@@ -130,7 +130,11 @@ onUnmounted(() => {
       @open-settings="handleSettingsOpen"
       @toggle-theme="handleThemeToggle"
     />
-    <SettingsPanel :open="isSettingsOpen" @close="handleSettingsClose" />
+    <SettingsPanel
+      :open="isSettingsOpen"
+      :theme="theme"
+      @close="handleSettingsClose"
+    />
   </main>
 </template>
 

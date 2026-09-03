@@ -37,7 +37,7 @@ const openSettings = async () => {
   await previewButton.click();
   await menuPanel.getByRole("button", { name: "設定" }).click();
 
-  const dialog = screen.getByRole("dialog", { name: "設定" });
+  const dialog = page.getByRole("dialog", { name: "設定" });
   await expect.element(dialog).toBeVisible();
 
   return { ...rendered, dialog };
