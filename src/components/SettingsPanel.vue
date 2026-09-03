@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import type { Theme } from "../types/app";
+import { SETTINGS_OPTIONS, type Theme } from "../types/app";
 
 interface Props {
   open: boolean;
   theme: Theme;
+  workDurationMinutes: number;
+  breakDurationMinutes: number;
 }
 
 defineProps<Props>();
 const emit = defineEmits<{
   close: [];
+  "update:workDurationMinutes": [value: number];
+  "update:breakDurationMinutes": [value: number];
 }>();
+
+const numberFromEvent = (event: Event) =>
+  Number((event.target as HTMLSelectElement).value);
 </script>
 
 <template>
@@ -31,8 +38,42 @@ const emit = defineEmits<{
           <button type="button" @click="emit('close')">閉じる</button>
         </header>
         <div class="settings-content">
-          <fieldset>
+          <fieldset class="settings-section">
             <legend>タイマー</legend>
+            <label>
+              <span>作業時間</span>
+              <select
+                :value="workDurationMinutes"
+                @change="
+                  emit('update:workDurationMinutes', numberFromEvent($event))
+                "
+              >
+                <option
+                  v-for="minutes in SETTINGS_OPTIONS.workDurationMinutes"
+                  :key="minutes"
+                  :value="minutes"
+                >
+                  {{ minutes }}分
+                </option>
+              </select>
+            </label>
+            <label>
+              <span>休憩時間</span>
+              <select
+                :value="breakDurationMinutes"
+                @change="
+                  emit('update:breakDurationMinutes', numberFromEvent($event))
+                "
+              >
+                <option
+                  v-for="minutes in SETTINGS_OPTIONS.breakDurationMinutes"
+                  :key="minutes"
+                  :value="minutes"
+                >
+                  {{ minutes }}分
+                </option>
+              </select>
+            </label>
           </fieldset>
           <fieldset>
             <legend>サウンド</legend>
@@ -85,5 +126,26 @@ const emit = defineEmits<{
 .settings-content {
   display: grid;
   gap: 16px;
+}
+
+.settings-section {
+  display: grid;
+  gap: 14px;
+}
+
+.settings-section label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settings-section select {
+  border: 1px solid var(--settings-panel-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--primary-text);
+  background: var(--screen-background);
+  font: inherit;
 }
 </style>

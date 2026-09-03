@@ -131,6 +131,8 @@ onUnmounted(() => {
       @toggle-theme="handleThemeToggle"
     />
     <SettingsPanel
+      v-model:work-duration-minutes="workDurationMinutes"
+      v-model:break-duration-minutes="breakDurationMinutes"
       :open="isSettingsOpen"
       :theme="theme"
       @close="handleSettingsClose"
