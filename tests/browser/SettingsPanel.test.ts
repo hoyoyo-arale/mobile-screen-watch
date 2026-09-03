@@ -10,6 +10,7 @@ const renderSettingsPanel = () =>
       theme: "dark",
       workDurationMinutes: 50,
       breakDurationMinutes: 10,
+      showClockSeconds: false,
       movementSpeedPixelsPerSecond: 15,
     },
   });
