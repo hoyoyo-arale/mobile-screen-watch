@@ -11,12 +11,16 @@ interface Props {
 defineProps<Props>();
 const emit = defineEmits<{
   close: [];
+  "update:theme": [value: Theme];
   "update:workDurationMinutes": [value: number];
   "update:breakDurationMinutes": [value: number];
 }>();
 
 const numberFromEvent = (event: Event) =>
   Number((event.target as HTMLSelectElement).value);
+
+const themeFromEvent = (event: Event): Theme =>
+  (event.target as HTMLSelectElement).value as Theme;
 </script>
 
 <template>
@@ -78,8 +82,18 @@ const numberFromEvent = (event: Event) =>
           <fieldset>
             <legend>サウンド</legend>
           </fieldset>
-          <fieldset>
+          <fieldset class="settings-section">
             <legend>表示</legend>
+            <label>
+              <span>テーマ</span>
+              <select
+                :value="theme"
+                @change="emit('update:theme', themeFromEvent($event))"
+              >
+                <option value="dark">ダーク</option>
+                <option value="light">ライト</option>
+              </select>
+            </label>
           </fieldset>
         </div>
       </section>
