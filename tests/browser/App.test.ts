@@ -141,6 +141,41 @@ test("opens the menu after a 48px upward touch gesture", async () => {
   await expect.element(menuPanel).toHaveAttribute("aria-hidden", "false");
 });
 
+test("does not activate the timer after opening the menu by touch gesture", async () => {
+  const { gestureAreaElement, menuPanel, screen } = await renderTouchMenu();
+  const primaryControl = screen.getByRole("button", { name: "作業開始" });
+  const pointerId = 1;
+  const startY = window.innerHeight - 1;
+
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointerdown",
+    pointerId,
+    100,
+    startY,
+  );
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointermove",
+    pointerId,
+    100,
+    startY - 48,
+  );
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointerup",
+    pointerId,
+    100,
+    startY - 48,
+  );
+  gestureAreaElement.click();
+
+  await expect.element(menuPanel).toHaveAttribute("aria-hidden", "false");
+  await expect
+    .element(primaryControl)
+    .toHaveAttribute("aria-label", "作業開始");
+});
+
 test("hides the touch preview when the gesture ends before opening", async () => {
   const { gestureAreaElement, menuBarElement } = await renderTouchMenu();
   const pointerId = 1;
