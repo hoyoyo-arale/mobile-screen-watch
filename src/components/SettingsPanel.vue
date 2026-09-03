@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SettingsSelect from "./SettingsSelect.vue";
 import { SETTINGS_OPTIONS, type Theme } from "../types/app";
 
 interface Props {
@@ -15,9 +16,6 @@ const emit = defineEmits<{
   "update:workDurationMinutes": [value: number];
   "update:breakDurationMinutes": [value: number];
 }>();
-
-const numberFromEvent = (event: Event) =>
-  Number((event.target as HTMLSelectElement).value);
 
 const themeFromEvent = (event: Event): Theme =>
   (event.target as HTMLSelectElement).value as Theme;
@@ -44,40 +42,20 @@ const themeFromEvent = (event: Event): Theme =>
         <div class="settings-content">
           <fieldset class="settings-section">
             <legend>タイマー</legend>
-            <label>
-              <span>作業時間</span>
-              <select
-                :value="workDurationMinutes"
-                @change="
-                  emit('update:workDurationMinutes', numberFromEvent($event))
-                "
-              >
-                <option
-                  v-for="minutes in SETTINGS_OPTIONS.workDurationMinutes"
-                  :key="minutes"
-                  :value="minutes"
-                >
-                  {{ minutes }}分
-                </option>
-              </select>
-            </label>
-            <label>
-              <span>休憩時間</span>
-              <select
-                :value="breakDurationMinutes"
-                @change="
-                  emit('update:breakDurationMinutes', numberFromEvent($event))
-                "
-              >
-                <option
-                  v-for="minutes in SETTINGS_OPTIONS.breakDurationMinutes"
-                  :key="minutes"
-                  :value="minutes"
-                >
-                  {{ minutes }}分
-                </option>
-              </select>
-            </label>
+            <SettingsSelect
+              label="作業時間"
+              :model-value="workDurationMinutes"
+              :options="SETTINGS_OPTIONS.workDurationMinutes"
+              suffix="分"
+              @update:model-value="emit('update:workDurationMinutes', $event)"
+            />
+            <SettingsSelect
+              label="休憩時間"
+              :model-value="breakDurationMinutes"
+              :options="SETTINGS_OPTIONS.breakDurationMinutes"
+              suffix="分"
+              @update:model-value="emit('update:breakDurationMinutes', $event)"
+            />
           </fieldset>
           <fieldset>
             <legend>サウンド</legend>
