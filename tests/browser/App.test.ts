@@ -315,3 +315,19 @@ test("applies and keeps the theme selected from settings", async () => {
     .element(reopenedDialog.getByLabelText("テーマ"))
     .toHaveValue("light");
 });
+
+test("toggles clock seconds in the display when the setting changes", async () => {
+  const { dialog, screen } = await openSettings();
+
+  expect(screen.container.querySelector(".clock-seconds")).toBeNull();
+
+  await dialog.getByLabelText("秒表示").selectOptions("on");
+  await expect
+    .poll(() => screen.container.querySelector(".clock-seconds"))
+    .not.toBeNull();
+
+  await dialog.getByLabelText("秒表示").selectOptions("off");
+  await expect
+    .poll(() => screen.container.querySelector(".clock-seconds"))
+    .toBeNull();
+});

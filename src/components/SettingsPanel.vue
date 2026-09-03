@@ -7,6 +7,7 @@ interface Props {
   theme: Theme;
   workDurationMinutes: number;
   breakDurationMinutes: number;
+  showClockSeconds: boolean;
   movementSpeedPixelsPerSecond: number;
 }
 
@@ -16,11 +17,15 @@ const emit = defineEmits<{
   "update:theme": [value: Theme];
   "update:workDurationMinutes": [value: number];
   "update:breakDurationMinutes": [value: number];
+  "update:showClockSeconds": [value: boolean];
   "update:movementSpeedPixelsPerSecond": [value: number];
 }>();
 
 const themeOptions = ["dark", "light"] as const;
 const themeLabel = (theme: Theme) => (theme === "dark" ? "ダーク" : "ライト");
+const clockSecondsOptions = ["off", "on"] as const;
+const clockSecondsLabel = (display: (typeof clockSecondsOptions)[number]) =>
+  display === "on" ? "表示する" : "表示しない";
 const movementSpeedLabel = (speed: number) => {
   if (speed === 10) return "遅い";
   if (speed === 25) return "速い";
@@ -83,6 +88,15 @@ const movementSpeedLabel = (speed: number) => {
               :format-option="movementSpeedLabel"
               @update:model-value="
                 emit('update:movementSpeedPixelsPerSecond', $event)
+              "
+            />
+            <SettingsSelect
+              label="秒表示"
+              :model-value="showClockSeconds ? 'on' : 'off'"
+              :options="clockSecondsOptions"
+              :format-option="clockSecondsLabel"
+              @update:model-value="
+                emit('update:showClockSeconds', $event === 'on')
               "
             />
           </fieldset>

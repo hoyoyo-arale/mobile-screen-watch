@@ -4,6 +4,7 @@ import { formatDate, formatTime, toIsoDate } from "../logic/clock";
 
 interface Props {
   now: Date;
+  showSeconds: boolean;
 }
 
 const props = defineProps<Props>();
@@ -19,7 +20,9 @@ const isoDate = computed(() => toIsoDate(props.now));
       <span>{{ timeText.hours }}</span>
       <span aria-hidden="true">:</span>
       <span>{{ timeText.minutes }}</span>
-      <span class="clock-seconds">:{{ timeText.seconds }}</span>
+      <span v-if="showSeconds" class="clock-seconds"
+        >:{{ timeText.seconds }}</span
+      >
     </time>
     <p class="clock-date">{{ dateText }}</p>
   </section>

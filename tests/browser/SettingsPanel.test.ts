@@ -10,6 +10,7 @@ const renderSettingsPanel = () =>
       theme: "dark",
       workDurationMinutes: 50,
       breakDurationMinutes: 10,
+      showClockSeconds: false,
       movementSpeedPixelsPerSecond: 15,
     },
   });
@@ -69,4 +70,12 @@ test("emits an update when a theme is selected", async () => {
   await page.getByLabelText("テーマ").selectOptions("light");
 
   expect(screen.emitted("update:theme")).toEqual([["light"]]);
+});
+
+test("emits a boolean update when clock seconds display is selected", async () => {
+  const screen = await renderSettingsPanel();
+
+  await page.getByLabelText("秒表示").selectOptions("on");
+
+  expect(screen.emitted("update:showClockSeconds")).toEqual([[true]]);
 });

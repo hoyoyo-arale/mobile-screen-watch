@@ -19,6 +19,7 @@ import { DEFAULT_SETTINGS, type Theme } from "./types/app";
 
 const now = ref(new Date());
 const theme = ref<Theme>("dark");
+const showClockSeconds = ref(DEFAULT_SETTINGS.showClockSeconds);
 const movementSpeedPixelsPerSecond = ref(
   DEFAULT_SETTINGS.movementSpeedPixelsPerSecond,
 );
@@ -162,7 +163,7 @@ onUnmounted(() => {
       :container-size="containerSize"
       :movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
     >
-      <ClockDisplay :now="now" />
+      <ClockDisplay :now="now" :show-seconds="showClockSeconds" />
       <TimerDisplay
         :state="timerState"
         :phase="timerPhase"
@@ -197,6 +198,7 @@ onUnmounted(() => {
     <SettingsPanel
       v-model:work-duration-minutes="workDurationMinutes"
       v-model:break-duration-minutes="breakDurationMinutes"
+      v-model:show-clock-seconds="showClockSeconds"
       v-model:theme="theme"
       v-model:movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
       :open="isSettingsOpen"

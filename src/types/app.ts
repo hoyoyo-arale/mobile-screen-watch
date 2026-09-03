@@ -7,6 +7,7 @@ export interface AppSettings {
   breakDurationMinutes: number;
   soundEnabled: boolean;
   theme: Theme;
+  showClockSeconds: boolean;
   changeColorOnBounce: boolean;
   /** 通常時に時計が画面を横断する秒数。値が小さいほど速く移動する。 */
   movementSpeedPixelsPerSecond: number;
@@ -17,6 +18,7 @@ export const DEFAULT_SETTINGS: Readonly<AppSettings> = {
   breakDurationMinutes: 10,
   soundEnabled: false,
   theme: "dark",
+  showClockSeconds: false,
   changeColorOnBounce: false,
   movementSpeedPixelsPerSecond: 15,
 };
