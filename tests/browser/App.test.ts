@@ -96,3 +96,24 @@ test("does not activate the screen timer control while settings is open", async 
     .poll(() => primaryControlElement.getAttribute("aria-label"))
     .toBe("作業開始");
 });
+
+test("keeps selected timer durations after settings is reopened", async () => {
+  const { dialog, hoverArea, menuPanel, previewButton } = await openSettings();
+
+  await dialog.getByLabelText("作業時間").selectOptions("60");
+  await dialog.getByLabelText("休憩時間").selectOptions("15");
+  await dialog.getByRole("button", { name: "閉じる" }).click();
+
+  await hoverArea.unhover();
+  await hoverArea.hover();
+  await previewButton.click();
+  await menuPanel.getByRole("button", { name: "設定" }).click();
+
+  const reopenedDialog = page.getByRole("dialog", { name: "設定" });
+  await expect
+    .element(reopenedDialog.getByLabelText("作業時間"))
+    .toHaveValue("60");
+  await expect
+    .element(reopenedDialog.getByLabelText("休憩時間"))
+    .toHaveValue("15");
+});
