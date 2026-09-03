@@ -117,3 +117,28 @@ test("keeps selected timer durations after settings is reopened", async () => {
     .element(reopenedDialog.getByLabelText("休憩時間"))
     .toHaveValue("15");
 });
+
+test("applies and keeps the theme selected from settings", async () => {
+  const { dialog, hoverArea, previewButton, screen } = await openSettings();
+
+  await dialog.getByLabelText("テーマ").selectOptions("light");
+
+  const clockScreen = screen.container.querySelector(".clock-screen");
+  const settingsLayer = document.querySelector(".settings-layer");
+  expect(clockScreen).toHaveClass("theme-light");
+  expect(settingsLayer).toHaveClass("theme-light");
+
+  await dialog.getByRole("button", { name: "閉じる" }).click();
+  await hoverArea.unhover();
+  await hoverArea.hover();
+  await previewButton.click();
+  await page
+    .getByRole("navigation", { name: "操作メニュー" })
+    .getByRole("button", { name: "設定" })
+    .click();
+
+  const reopenedDialog = page.getByRole("dialog", { name: "設定" });
+  await expect
+    .element(reopenedDialog.getByLabelText("テーマ"))
+    .toHaveValue("light");
+});

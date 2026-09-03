@@ -47,3 +47,25 @@ test("emits updates when timer durations are selected", async () => {
   expect(screen.emitted("update:workDurationMinutes")).toEqual([[60]]);
   expect(screen.emitted("update:breakDurationMinutes")).toEqual([[15]]);
 });
+
+test("shows the available theme options", async () => {
+  await renderSettingsPanel();
+  const themeSelect = page.getByLabelText("テーマ").element();
+
+  if (!(themeSelect instanceof HTMLSelectElement)) {
+    throw new Error("Theme select was not rendered");
+  }
+
+  expect([...themeSelect.options].map((option) => option.value)).toEqual([
+    "dark",
+    "light",
+  ]);
+});
+
+test("emits an update when a theme is selected", async () => {
+  const screen = await renderSettingsPanel();
+
+  await page.getByLabelText("テーマ").selectOptions("light");
+
+  expect(screen.emitted("update:theme")).toEqual([["light"]]);
+});
