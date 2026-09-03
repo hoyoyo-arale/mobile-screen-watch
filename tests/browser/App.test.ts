@@ -80,6 +80,21 @@ test("opens settings from the menu and closes it from the frontmost button", asy
   await expect.element(dialog).not.toBeInTheDocument();
 });
 
+test("closes settings from the backdrop", async () => {
+  const { dialog } = await openSettings();
+  const backdropElement = document.querySelector(".settings-backdrop");
+
+  if (!(backdropElement instanceof HTMLElement)) {
+    throw new Error("Settings backdrop was not rendered");
+  }
+
+  await page.elementLocator(backdropElement).click({
+    position: { x: 4, y: 4 },
+  });
+
+  await expect.element(dialog).not.toBeInTheDocument();
+});
+
 test("does not activate the screen timer control while settings is open", async () => {
   const { screen } = await openSettings();
   const primaryControl = screen.getByRole("button", { name: "作業開始" });
