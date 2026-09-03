@@ -1,0 +1,171 @@
+<script setup lang="ts">
+import SettingsSelect from "./SettingsSelect.vue";
+import { SETTINGS_OPTIONS, type Theme } from "../types/app";
+
+interface Props {
+  open: boolean;
+  theme: Theme;
+  workDurationMinutes: number;
+  breakDurationMinutes: number;
+  movementSpeedPixelsPerSecond: number;
+}
+
+defineProps<Props>();
+const emit = defineEmits<{
+  close: [];
+  "update:theme": [value: Theme];
+  "update:workDurationMinutes": [value: number];
+  "update:breakDurationMinutes": [value: number];
+  "update:movementSpeedPixelsPerSecond": [value: number];
+}>();
+
+const themeOptions = ["dark", "light"] as const;
+const themeLabel = (theme: Theme) => (theme === "dark" ? "ダーク" : "ライト");
+const movementSpeedLabel = (speed: number) => {
+  if (speed === 10) return "遅い";
+  if (speed === 25) return "速い";
+  return "標準";
+};
+</script>
+
+<template>
+  <Teleport to="body">
+    <div v-if="open" class="settings-layer" :class="`theme-${theme}`">
+      <div
+        class="settings-backdrop"
+        aria-hidden="true"
+        @click="emit('close')"
+      ></div>
+      <section
+        class="settings-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settings-title"
+      >
+        <header class="settings-header">
+          <h2 id="settings-title">設定</h2>
+          <button type="button" @click="emit('close')">閉じる</button>
+        </header>
+        <div class="settings-content">
+          <fieldset class="settings-section">
+            <legend>タイマー</legend>
+            <SettingsSelect
+              label="作業時間"
+              :model-value="workDurationMinutes"
+              :options="SETTINGS_OPTIONS.workDurationMinutes"
+              suffix="分"
+              @update:model-value="emit('update:workDurationMinutes', $event)"
+            />
+            <SettingsSelect
+              label="休憩時間"
+              :model-value="breakDurationMinutes"
+              :options="SETTINGS_OPTIONS.breakDurationMinutes"
+              suffix="分"
+              @update:model-value="emit('update:breakDurationMinutes', $event)"
+            />
+          </fieldset>
+          <fieldset>
+            <legend>サウンド</legend>
+          </fieldset>
+          <fieldset class="settings-section">
+            <legend>表示</legend>
+            <SettingsSelect
+              label="テーマ"
+              :model-value="theme"
+              :options="themeOptions"
+              :format-option="themeLabel"
+              @update:model-value="emit('update:theme', $event)"
+            />
+            <SettingsSelect
+              label="移動速度"
+              :model-value="movementSpeedPixelsPerSecond"
+              :options="SETTINGS_OPTIONS.movementSpeedPixelsPerSecond"
+              :format-option="movementSpeedLabel"
+              @update:model-value="
+                emit('update:movementSpeedPixelsPerSecond', $event)
+              "
+            />
+          </fieldset>
+        </div>
+      </section>
+    </div>
+  </Teleport>
+</template>
+
+<style scoped>
+.settings-layer {
+  --screen-background: #090909;
+  --primary-text: #f1eee8;
+  --settings-panel-border: #f1eee8;
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+}
+
+.settings-layer.theme-light {
+  --screen-background: #f3f1ed;
+  --primary-text: #252321;
+  --settings-panel-border: #252321;
+}
+
+.settings-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 45%);
+}
+
+.settings-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: min(calc(100% - 32px), 720px);
+  padding: 20px;
+  color: var(--primary-text);
+  background: var(--screen-background);
+  transform: translate(-50%, -50%);
+  border: medium solid var(--settings-panel-border);
+  border-radius: 10px;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.settings-header h2 {
+  margin: 0;
+}
+
+.settings-header button {
+  border: 1px solid var(--settings-panel-border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: var(--primary-text);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+
+.settings-header button:hover,
+.settings-header button:focus-visible {
+  color: var(--screen-background);
+  background: var(--primary-text);
+}
+
+.settings-content {
+  display: grid;
+  gap: 16px;
+}
+
+.settings-section {
+  display: grid;
+  gap: 14px;
+}
+</style>

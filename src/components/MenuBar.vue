@@ -17,7 +17,6 @@ const emit = defineEmits<{
   close: [];
   open: [];
   openSettings: [];
-  startTimer: [];
   toggleTheme: [];
 }>();
 
@@ -100,7 +99,6 @@ onUnmounted(() => {
       <button v-if="isPreviewVisible && !open" class="menu-peek-trigger" type="button" tabindex="-1"
         aria-label="操作メニューを開く" @click.stop="handlePreviewOpen" />
       <div id="clock-menu" class="menu-panel" :aria-hidden="!open" :inert="!open" @click.stop>
-        <button type="button" @click="emit('startTimer')">作業開始</button>
         <button class="theme-toggle" type="button" :aria-label="theme === 'dark'
             ? 'ライトテーマに切り替え'
             : 'ダークテーマに切り替え'

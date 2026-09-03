@@ -63,6 +63,10 @@ test("does not emit activate while disabled", async () => {
   const control = page.getByRole("button", { name: "一時停止" });
 
   await expect.element(control).toBeDisabled();
-  control.element().click();
+  const controlElement = control.element();
+  if (!(controlElement instanceof HTMLButtonElement)) {
+    throw new Error("Screen primary control was not rendered as a button");
+  }
+  controlElement.click();
   expect(screen.emitted("activate")).toBeUndefined();
 });

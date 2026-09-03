@@ -24,6 +24,7 @@ body {
   --secondary-text: #b8b0a6;
   --seconds-text: #c8c2b9;
   --control-border: rgb(241 238 232 / 35%);
+  --settings-panel-border: #f1eee8;
   display: grid;
   min-height: 100vh;
   min-height: 100dvh;
@@ -44,6 +45,7 @@ body {
   --secondary-text: #635e58;
   --seconds-text: #77716a;
   --control-border: rgb(37 35 33 / 35%);
+  --settings-panel-border: #252321;
 }
 .timer-display {
   display: grid;

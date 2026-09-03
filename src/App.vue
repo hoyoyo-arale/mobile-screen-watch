@@ -4,6 +4,7 @@ import ClockDisplay from "./components/ClockDisplay.vue";
 import MenuBar from "./components/MenuBar.vue";
 import MovingDisplayBlock from "./components/MovingDisplayBlock.vue";
 import ScreenPrimaryControl from "./components/ScreenPrimaryControl.vue";
+import SettingsPanel from "./components/SettingsPanel.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import { useTimer } from "./composables/useTimer";
 import { getTimerPrimaryAction } from "./logic/timer";
@@ -26,6 +27,7 @@ const {
   handlePrimaryAction,
 } = useTimer(workDurationMinutes, breakDurationMinutes);
 const isMenuOpen = ref(false);
+const isSettingsOpen = ref(false);
 const primaryActionLabel = computed(() => {
   const action = getTimerPrimaryAction(timerState.value);
 
@@ -62,6 +64,15 @@ const handleMenuClose = () => {
   isMenuOpen.value = false;
 };
 
+const handleSettingsOpen = () => {
+  handleMenuClose();
+  isSettingsOpen.value = true;
+};
+
+const handleSettingsClose = () => {
+  isSettingsOpen.value = false;
+};
+
 const updateContainerSize = () => {
   const element = screenElement.value;
   if (!element) return;
@@ -89,7 +100,7 @@ onUnmounted(() => {
   <main ref="screenElement" class="clock-screen" :class="`theme-${theme}`">
     <ScreenPrimaryControl
       :label="primaryActionLabel"
-      :disabled="isMenuOpen"
+      :disabled="isMenuOpen || isSettingsOpen"
       @activate="handlePrimaryAction"
     />
     <MovingDisplayBlock
@@ -116,9 +127,16 @@ onUnmounted(() => {
       :theme="theme"
       @close="handleMenuClose"
       @open="handleMenuOpen"
-      @open-settings="handleMenuClose"
-      @start-timer="handleMenuClose"
+      @open-settings="handleSettingsOpen"
       @toggle-theme="handleThemeToggle"
+    />
+    <SettingsPanel
+      v-model:work-duration-minutes="workDurationMinutes"
+      v-model:break-duration-minutes="breakDurationMinutes"
+      v-model:theme="theme"
+      v-model:movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
+      :open="isSettingsOpen"
+      @close="handleSettingsClose"
     />
   </main>
 </template>
