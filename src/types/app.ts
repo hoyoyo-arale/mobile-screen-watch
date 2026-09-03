@@ -24,7 +24,7 @@ export const DEFAULT_SETTINGS: Readonly<AppSettings> = {
 export const SETTINGS_OPTIONS = {
   workDurationMinutes: [45, 50, 60, 75],
   breakDurationMinutes: [10, 15, 20],
-  movementSpeedPixelsPerSecond: [5, 10, 15, 25, 40],
+  movementSpeedPixelsPerSecond: [10, 15, 25],
 } as const;
 
 export const NIGHT_MODE = {

@@ -7,6 +7,7 @@ interface Props {
   theme: Theme;
   workDurationMinutes: number;
   breakDurationMinutes: number;
+  movementSpeedPixelsPerSecond: number;
 }
 
 defineProps<Props>();
@@ -15,10 +16,16 @@ const emit = defineEmits<{
   "update:theme": [value: Theme];
   "update:workDurationMinutes": [value: number];
   "update:breakDurationMinutes": [value: number];
+  "update:movementSpeedPixelsPerSecond": [value: number];
 }>();
 
 const themeOptions = ["dark", "light"] as const;
 const themeLabel = (theme: Theme) => (theme === "dark" ? "ダーク" : "ライト");
+const movementSpeedLabel = (speed: number) => {
+  if (speed === 10) return "遅い";
+  if (speed === 25) return "速い";
+  return "標準";
+};
 </script>
 
 <template>
@@ -68,6 +75,15 @@ const themeLabel = (theme: Theme) => (theme === "dark" ? "ダーク" : "ライ�
               :options="themeOptions"
               :format-option="themeLabel"
               @update:model-value="emit('update:theme', $event)"
+            />
+            <SettingsSelect
+              label="移動速度"
+              :model-value="movementSpeedPixelsPerSecond"
+              :options="SETTINGS_OPTIONS.movementSpeedPixelsPerSecond"
+              :format-option="movementSpeedLabel"
+              @update:model-value="
+                emit('update:movementSpeedPixelsPerSecond', $event)
+              "
             />
           </fieldset>
         </div>

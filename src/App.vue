@@ -134,6 +134,7 @@ onUnmounted(() => {
       v-model:work-duration-minutes="workDurationMinutes"
       v-model:break-duration-minutes="breakDurationMinutes"
       v-model:theme="theme"
+      v-model:movement-speed-pixels-per-second="movementSpeedPixelsPerSecond"
       :open="isSettingsOpen"
       @close="handleSettingsClose"
     />
