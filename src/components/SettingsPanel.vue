@@ -10,6 +10,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
+  <div
+    v-if="open"
+    class="settings-backdrop"
+    aria-hidden="true"
+    @click="emit('close')"
+  ></div>
   <section
     v-if="open"
     class="settings-panel"
@@ -36,6 +42,13 @@ const emit = defineEmits<{
 </template>
 
 <style scoped>
+.settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  background: rgb(0 0 0 / 45%);
+}
+
 .settings-panel {
   position: fixed;
   top: 50%;
