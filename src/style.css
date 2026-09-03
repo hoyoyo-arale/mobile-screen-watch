@@ -83,26 +83,6 @@ body {
   font-size: 1.8rem;
   font-variant-numeric: tabular-nums;
 }
-.timer-icon-debug {
-  position: fixed;
-  top: max(12px, env(safe-area-inset-top));
-  left: max(12px, env(safe-area-inset-left));
-  display: flex;
-  z-index: 10;
-  gap: 12px;
-  padding: 8px 12px;
-  border: 1px dashed var(--control-border);
-  border-radius: 8px;
-  color: var(--secondary-text);
-  background: var(--screen-background);
-  font-size: 0.75rem;
-}
-.timer-icon-debug__item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--timer-color, var(--secondary-text));
-}
 @media (orientation: landscape) {
   .clock-screen {
     padding-inline: max(32px, env(safe-area-inset-left))
