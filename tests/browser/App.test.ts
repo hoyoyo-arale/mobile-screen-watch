@@ -43,6 +43,40 @@ const openSettings = async () => {
   return { ...rendered, dialog };
 };
 
+const renderTouchMenu = async () => {
+  const rendered = await renderMenu();
+  const gestureAreaElement = rendered.screen.container.querySelector(
+    ".mobile-menu-gesture-area",
+  );
+
+  if (!(gestureAreaElement instanceof HTMLElement)) {
+    throw new Error("Mobile menu gesture area was not rendered");
+  }
+
+  gestureAreaElement.setPointerCapture = () => undefined;
+
+  return { ...rendered, gestureAreaElement };
+};
+
+const dispatchTouchPointer = (
+  element: HTMLElement,
+  type: string,
+  pointerId: number,
+  x: number,
+  y: number,
+) => {
+  element.dispatchEvent(
+    new PointerEvent(type, {
+      bubbles: true,
+      clientX: x,
+      clientY: y,
+      isPrimary: true,
+      pointerId,
+      pointerType: "touch",
+    }),
+  );
+};
+
 test("shows the menu preview while hovering", async () => {
   const { hoverArea, menuBarElement } = await renderMenu();
 
@@ -53,6 +87,130 @@ test("shows the menu preview while hovering", async () => {
   await expect
     .poll(() => menuBarElement.getBoundingClientRect().top)
     .toBeLessThan(window.innerHeight);
+});
+
+test("shows the menu preview after a 12px upward touch gesture", async () => {
+  const { gestureAreaElement, menuBarElement } = await renderTouchMenu();
+  const pointerId = 1;
+  const startY = window.innerHeight - 1;
+
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointerdown",
+    pointerId,
+    100,
+    startY,
+  );
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointermove",
+    pointerId,
+    100,
+    startY - 12,
+  );
+
+  await expect
+    .poll(() => menuBarElement.classList.contains("menu-bar--preview"))
+    .toBe(true);
+});
+
+test("opens the menu after a 48px upward touch gesture", async () => {
+  const { gestureAreaElement, menuBarElement, menuPanel } =
+    await renderTouchMenu();
+  const pointerId = 1;
+  const startY = window.innerHeight - 1;
+
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointerdown",
+    pointerId,
+    100,
+    startY,
+  );
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointermove",
+    pointerId,
+    100,
+    startY - 48,
+  );
+
+  await expect
+    .poll(() => menuBarElement.classList.contains("menu-bar--open"))
+    .toBe(true);
+  await expect.element(menuPanel).toHaveAttribute("aria-hidden", "false");
+});
+
+test("does not activate the timer after opening the menu by touch gesture", async () => {
+  const { gestureAreaElement, menuPanel, screen } = await renderTouchMenu();
+  const primaryControl = screen.getByRole("button", { name: "作業開始" });
+  const pointerId = 1;
+  const startY = window.innerHeight - 1;
+
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointerdown",
+    pointerId,
+    100,
+    startY,
+  );
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointermove",
+    pointerId,
+    100,
+    startY - 48,
+  );
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointerup",
+    pointerId,
+    100,
+    startY - 48,
+  );
+  gestureAreaElement.click();
+
+  await expect.element(menuPanel).toHaveAttribute("aria-hidden", "false");
+  await expect
+    .element(primaryControl)
+    .toHaveAttribute("aria-label", "作業開始");
+});
+
+test("hides the touch preview when the gesture ends before opening", async () => {
+  const { gestureAreaElement, menuBarElement } = await renderTouchMenu();
+  const pointerId = 1;
+  const startY = window.innerHeight - 1;
+
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointerdown",
+    pointerId,
+    100,
+    startY,
+  );
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointermove",
+    pointerId,
+    100,
+    startY - 12,
+  );
+  await expect
+    .poll(() => menuBarElement.classList.contains("menu-bar--preview"))
+    .toBe(true);
+
+  dispatchTouchPointer(
+    gestureAreaElement,
+    "pointerup",
+    pointerId,
+    100,
+    startY - 12,
+  );
+
+  await expect
+    .poll(() => menuBarElement.classList.contains("menu-bar--preview"))
+    .toBe(false);
+  expect(menuBarElement).not.toHaveClass("menu-bar--open");
 });
 
 test("opens the previewed menu and closes it from outside", async () => {
