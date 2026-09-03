@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onUnmounted, ref, watch } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 import { UI_TIMINGS, type Theme } from "../types/app";
 
 interface Props {
   open: boolean;
   theme: Theme;
+  gesturePreview?: boolean;
   previewDurationMs?: number;
   autoHideDurationMs?: number;
 }
@@ -12,6 +13,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   previewDurationMs: UI_TIMINGS.menuPreviewDurationMs,
   autoHideDurationMs: UI_TIMINGS.menuAutoHideDurationMs,
+  gesturePreview: false,
 });
 const emit = defineEmits<{
   close: [];
@@ -22,6 +24,9 @@ const emit = defineEmits<{
 
 let hideTimeout: number | undefined;
 const isPreviewVisible = ref(false);
+const isPreviewShown = computed(
+  () => !props.open && (isPreviewVisible.value || props.gesturePreview),
+);
 const canShowPreview = ref(true);
 let previewTimeout: number | undefined;
 
@@ -93,10 +98,10 @@ onUnmounted(() => {
   <div class="menu-hover-area" :class="{ 'menu-hover-area--open': open }" @pointerenter="handlePreviewEnter"
     @pointerleave="handlePreviewLeave">
     <nav class="menu-bar" :class="{
-      'menu-bar--preview': isPreviewVisible,
+      'menu-bar--preview': isPreviewShown,
       'menu-bar--open': open,
     }" aria-label="操作メニュー">
-      <button v-if="isPreviewVisible && !open" class="menu-peek-trigger" type="button" tabindex="-1"
+      <button v-if="isPreviewShown" class="menu-peek-trigger" type="button" tabindex="-1"
         aria-label="操作メニューを開く" @click.stop="handlePreviewOpen" />
       <div id="clock-menu" class="menu-panel" :aria-hidden="!open" :inert="!open" @click.stop>
         <button class="theme-toggle" type="button" :aria-label="theme === 'dark'

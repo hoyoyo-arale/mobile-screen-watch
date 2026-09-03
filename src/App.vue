@@ -7,6 +7,11 @@ import ScreenPrimaryControl from "./components/ScreenPrimaryControl.vue";
 import SettingsPanel from "./components/SettingsPanel.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import { useTimer } from "./composables/useTimer";
+import {
+  getMenuSwipeStage,
+  isMenuSwipeStart,
+  type PointerPosition,
+} from "./logic/menuGesture";
 import { getTimerPrimaryAction } from "./logic/timer";
 import { toggleTheme as getNextTheme } from "./logic/theme";
 import type { MotionBounds } from "./logic/motion";
@@ -27,6 +32,7 @@ const {
   handlePrimaryAction,
 } = useTimer(workDurationMinutes, breakDurationMinutes);
 const isMenuOpen = ref(false);
+const isGesturePreviewVisible = ref(false);
 const isSettingsOpen = ref(false);
 const primaryActionLabel = computed(() => {
   const action = getTimerPrimaryAction(timerState.value);
@@ -41,12 +47,15 @@ const screenElement = useTemplateRef<HTMLElement>("screenElement");
 const containerSize = ref<MotionBounds>({ width: 0, height: 0 });
 let clockInterval: number | undefined;
 let resizeObserver: ResizeObserver | undefined;
+let gesturePointerId: number | undefined;
+let gestureStartPosition: PointerPosition | undefined;
 
 const handleThemeToggle = () => {
   theme.value = getNextTheme(theme.value);
 };
 
 const handleMenuOpen = () => {
+  isGesturePreviewVisible.value = false;
   isMenuOpen.value = true;
 };
 
@@ -71,6 +80,51 @@ const handleSettingsOpen = () => {
 
 const handleSettingsClose = () => {
   isSettingsOpen.value = false;
+};
+
+const resetMenuGesture = () => {
+  gesturePointerId = undefined;
+  gestureStartPosition = undefined;
+  isGesturePreviewVisible.value = false;
+};
+
+const handleMenuGestureStart = (event: PointerEvent) => {
+  if (
+    event.pointerType !== "touch" ||
+    !event.isPrimary ||
+    isMenuOpen.value ||
+    isSettingsOpen.value ||
+    !isMenuSwipeStart(event.clientY, window.innerHeight)
+  ) {
+    return;
+  }
+
+  gesturePointerId = event.pointerId;
+  gestureStartPosition = { x: event.clientX, y: event.clientY };
+  event.currentTarget instanceof Element &&
+    event.currentTarget.setPointerCapture(event.pointerId);
+};
+
+const handleMenuGestureMove = (event: PointerEvent) => {
+  if (
+    event.pointerId !== gesturePointerId ||
+    !gestureStartPosition ||
+    isMenuOpen.value
+  ) {
+    return;
+  }
+
+  const stage = getMenuSwipeStage(gestureStartPosition, {
+    x: event.clientX,
+    y: event.clientY,
+  });
+
+  if (stage === "open") {
+    handleMenuOpen();
+    return;
+  }
+
+  isGesturePreviewVisible.value = stage === "preview";
 };
 
 const updateContainerSize = () => {
@@ -122,9 +176,18 @@ onUnmounted(() => {
       aria-hidden="true"
       @click.stop="handleMenuClose"
     />
-    <div class="mobile-menu-gesture-area" aria-hidden="true" />
+    <div
+      class="mobile-menu-gesture-area"
+      aria-hidden="true"
+      @click.stop
+      @pointercancel="resetMenuGesture"
+      @pointerdown="handleMenuGestureStart"
+      @pointermove="handleMenuGestureMove"
+      @pointerup="resetMenuGesture"
+    />
     <MenuBar
       :open="isMenuOpen"
+      :gesture-preview="isGesturePreviewVisible"
       :theme="theme"
       @close="handleMenuClose"
       @open="handleMenuOpen"
