@@ -8,7 +8,6 @@ interface Props {
   state: TimerState;
   phase: TimerPhase;
   remainingText: string;
-  statusText: string;
 }
 
 defineProps<Props>();
@@ -40,6 +39,5 @@ defineProps<Props>();
     <time class="timer-time" :datetime="remainingText">{{
       remainingText
     }}</time>
-    <p class="timer-status" aria-live="polite">{{ statusText }}</p>
   </section>
 </template>

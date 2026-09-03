@@ -47,13 +47,6 @@ export const useTimer = (
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   });
 
-  const statusText = computed(() => {
-    if (state.value.status === "completed") return "完了";
-    if (state.value.status === "paused") return "一時停止中";
-    if (state.value.status === "running") return "実行中";
-    return "待機中";
-  });
-
   const start = (nextPhase = phase.value) => {
     selectedPhase.value = nextPhase;
     state.value = startTimer(
@@ -100,7 +93,6 @@ export const useTimer = (
     state,
     phase,
     remainingText,
-    statusText,
     handlePrimaryAction,
   };
 };

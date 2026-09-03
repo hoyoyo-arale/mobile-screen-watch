@@ -74,11 +74,6 @@ body {
   background: currentColor;
   mask: var(--timer-icon-url) center / contain no-repeat;
 }
-.timer-status {
-  margin: 0;
-  color: var(--secondary-text);
-  font-size: 0.8rem;
-}
 .timer-time {
   font-size: 1.8rem;
   font-variant-numeric: tabular-nums;

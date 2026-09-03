@@ -29,7 +29,6 @@ const {
   state: timerState,
   phase: timerPhase,
   remainingText,
-  statusText,
   handlePrimaryAction,
 } = useTimer(workDurationMinutes, breakDurationMinutes);
 const isMenuOpen = ref(false);
@@ -168,7 +167,6 @@ onUnmounted(() => {
         :state="timerState"
         :phase="timerPhase"
         :remaining-text="remainingText"
-        :status-text="statusText"
       />
     </MovingDisplayBlock>
     <div
