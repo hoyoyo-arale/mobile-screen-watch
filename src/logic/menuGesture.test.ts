@@ -1,17 +1,43 @@
 import { describe, expect, it } from "vitest";
-import { getMenuSwipeStage, isMenuSwipeStart } from "./menuGesture";
+import {
+  getMenuSwipeStage,
+  getMenuSwipeStartAreaHeight,
+  isMenuSwipeStart,
+} from "./menuGesture";
 
-describe("isMenuSwipeStart", () => {
-  const viewportHeight = 800;
-
-  it("accepts a pointer within 24px of the bottom edge", () => {
-    expect(isMenuSwipeStart(776, viewportHeight)).toBe(true);
-    expect(isMenuSwipeStart(800, viewportHeight)).toBe(true);
+describe("getMenuSwipeStartAreaHeight", () => {
+  it("uses the minimum height on a short viewport", () => {
+    expect(getMenuSwipeStartAreaHeight(400)).toBe(32);
   });
 
-  it("rejects a pointer outside the bottom 24px", () => {
-    expect(isMenuSwipeStart(775, viewportHeight)).toBe(false);
-    expect(isMenuSwipeStart(801, viewportHeight)).toBe(false);
+  it("uses 6% of the viewport height between the limits", () => {
+    expect(getMenuSwipeStartAreaHeight(600)).toBe(36);
+  });
+
+  it("uses the maximum height on a tall viewport", () => {
+    expect(getMenuSwipeStartAreaHeight(1000)).toBe(48);
+  });
+});
+
+describe("isMenuSwipeStart", () => {
+  it.each([
+    { viewportHeight: 400, areaHeight: 32 },
+    { viewportHeight: 600, areaHeight: 36 },
+    { viewportHeight: 1000, areaHeight: 48 },
+  ])(
+    "accepts the $areaHeight px start area for a $viewportHeight px viewport",
+    ({ viewportHeight, areaHeight }) => {
+      expect(
+        isMenuSwipeStart(viewportHeight - areaHeight, viewportHeight),
+      ).toBe(true);
+      expect(
+        isMenuSwipeStart(viewportHeight - areaHeight - 1, viewportHeight),
+      ).toBe(false);
+    },
+  );
+
+  it("rejects a pointer below the viewport", () => {
+    expect(isMenuSwipeStart(801, 800)).toBe(false);
   });
 });
 
