@@ -33,7 +33,7 @@ const numberFromEvent = (event: Event) =>
         aria-modal="true"
         aria-labelledby="settings-title"
       >
-        <header>
+        <header class="settings-header">
           <h2 id="settings-title">設定</h2>
           <button type="button" @click="emit('close')">閉じる</button>
         </header>
@@ -121,6 +121,37 @@ const numberFromEvent = (event: Event) =>
   transform: translate(-50%, -50%);
   border: medium solid var(--settings-panel-border);
   border-radius: 10px;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.settings-header h2 {
+  margin: 0;
+}
+
+.settings-header button {
+  border: 1px solid var(--settings-panel-border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: var(--primary-text);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+
+.settings-header button:hover,
+.settings-header button:focus-visible {
+  color: var(--screen-background);
+  background: var(--primary-text);
 }
 
 .settings-content {
