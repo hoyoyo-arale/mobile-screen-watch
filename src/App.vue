@@ -122,6 +122,7 @@ onUnmounted(() => {
       aria-hidden="true"
       @click.stop="handleMenuClose"
     />
+    <div class="mobile-menu-gesture-area" aria-hidden="true" />
     <MenuBar
       :open="isMenuOpen"
       :theme="theme"
@@ -146,9 +147,24 @@ onUnmounted(() => {
   z-index: 1;
   pointer-events: none;
 }
+.mobile-menu-gesture-area {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  height: 24px;
+  pointer-events: none;
+  touch-action: none;
+}
 .menu-backdrop {
   position: fixed;
   inset: 0;
   z-index: 3;
+}
+@media (hover: none) and (pointer: coarse) {
+  .mobile-menu-gesture-area {
+    pointer-events: auto;
+  }
 }
 </style>
