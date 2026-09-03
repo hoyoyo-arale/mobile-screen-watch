@@ -17,8 +17,8 @@ const emit = defineEmits<{
   "update:breakDurationMinutes": [value: number];
 }>();
 
-const themeFromEvent = (event: Event): Theme =>
-  (event.target as HTMLSelectElement).value as Theme;
+const themeOptions = ["dark", "light"] as const;
+const themeLabel = (theme: Theme) => (theme === "dark" ? "ダーク" : "ライト");
 </script>
 
 <template>
@@ -62,16 +62,13 @@ const themeFromEvent = (event: Event): Theme =>
           </fieldset>
           <fieldset class="settings-section">
             <legend>表示</legend>
-            <label>
-              <span>テーマ</span>
-              <select
-                :value="theme"
-                @change="emit('update:theme', themeFromEvent($event))"
-              >
-                <option value="dark">ダーク</option>
-                <option value="light">ライト</option>
-              </select>
-            </label>
+            <SettingsSelect
+              label="テーマ"
+              :model-value="theme"
+              :options="themeOptions"
+              :format-option="themeLabel"
+              @update:model-value="emit('update:theme', $event)"
+            />
           </fieldset>
         </div>
       </section>
@@ -154,21 +151,5 @@ const themeFromEvent = (event: Event): Theme =>
 .settings-section {
   display: grid;
   gap: 14px;
-}
-
-.settings-section label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.settings-section select {
-  border: 1px solid var(--settings-panel-border);
-  border-radius: 8px;
-  padding: 8px 12px;
-  color: var(--primary-text);
-  background: var(--screen-background);
-  font: inherit;
 }
 </style>
