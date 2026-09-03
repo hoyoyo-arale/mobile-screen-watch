@@ -71,3 +71,11 @@ test("emits an update when a theme is selected", async () => {
 
   expect(screen.emitted("update:theme")).toEqual([["light"]]);
 });
+
+test("emits a boolean update when clock seconds display is selected", async () => {
+  const screen = await renderSettingsPanel();
+
+  await page.getByLabelText("秒表示").selectOptions("on");
+
+  expect(screen.emitted("update:showClockSeconds")).toEqual([[true]]);
+});
