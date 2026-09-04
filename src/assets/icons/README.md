@@ -25,6 +25,12 @@ and are available for selecting alternate icons by timer state.
 | `work-wrench-outline.svg`      | `md-wrench_outline`     | `U+F0BE0`  | 作業中          |
 | `work-keyboard.svg`            | `md-keyboard`           | `U+F030C`  | 作業中          |
 | `work-keyboard-outline.svg`    | `md-keyboard_outline`   | `U+F097B`  | 作業中          |
+| `close.svg`                    | `md-close`              | `U+F0156`  | 閉じる          |
+| `close-outline.svg`            | `md-close_outline`      | `U+F06C9`  | 閉じる          |
+| `close-circle.svg`             | `md-close_circle`       | `U+F0159`  | 閉じる          |
+| `close-circle-outline.svg`     | `md-close_circle_outline` | `U+F015A` | 閉じる          |
+| `close-box.svg`                | `md-close_box`          | `U+F0157`  | 閉じる          |
+| `close-box-outline.svg`        | `md-close_box_outline`  | `U+F0158`  | 閉じる          |
 | `break-coffee-outline.svg`     | `md-coffee_outline`     | `U+F06CA`  | 休憩中          |
 | `break-bed-outline.svg`        | `md-bed_outline`        | `U+F0099`  | 休憩中          |
 | `break-yoga.svg`               | `md-yoga`               | `U+F117C`  | 休憩中          |
