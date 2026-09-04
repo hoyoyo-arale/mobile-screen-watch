@@ -4,9 +4,17 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".note/**"
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".note/**"
 
 permissions:
   contents: read
