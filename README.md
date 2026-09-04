@@ -2,6 +2,9 @@
 
 座り過ぎ防止のための作業・休憩タイマーを備えた、モバイル端末向けの24時間表示クロック
 
+## Demo
+
+[Mobile Screen Watchを試す](https://hoyoyo-arale.github.io/mobile-screen-watch/)
 
 ## 主な機能
 
@@ -37,4 +40,3 @@ npm run dev
 | `npm run test:browser`  | ブラウザ環境でのテストを実行     |
 | `npm run format`        | Prettierでフォーマット           |
 | `npm run format:check`  | フォーマットの確認のみ実行       |
-
