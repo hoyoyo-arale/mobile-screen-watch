@@ -21,6 +21,10 @@ and are available for selecting alternate icons by timer state.
 | `idle-clock-outline.svg`       | `md-clock_outline`      | `U+F0150`  | 待機中          |
 | `work-briefcase-outline.svg`   | `md-briefcase_outline`  | `U+F0814`  | 作業中          |
 | `work-laptop.svg`              | `md-laptop`             | `U+F0322`  | 作業中          |
+| `work-wrench.svg`              | `md-wrench`             | `U+F05B7`  | 作業中          |
+| `work-wrench-outline.svg`      | `md-wrench_outline`     | `U+F0BE0`  | 作業中          |
+| `work-keyboard.svg`            | `md-keyboard`           | `U+F030C`  | 作業中          |
+| `work-keyboard-outline.svg`    | `md-keyboard_outline`   | `U+F097B`  | 作業中          |
 | `break-coffee-outline.svg`     | `md-coffee_outline`     | `U+F06CA`  | 休憩中          |
 | `break-bed-outline.svg`        | `md-bed_outline`        | `U+F0099`  | 休憩中          |
 | `break-yoga.svg`               | `md-yoga`               | `U+F117C`  | 休憩中          |

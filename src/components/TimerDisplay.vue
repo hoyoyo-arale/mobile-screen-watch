@@ -2,7 +2,7 @@
 import breakCoffeeIconUrl from "../assets/icons/break-coffee-outline.svg";
 import idleTimerIconUrl from "../assets/icons/idle-timer-outline.svg";
 import pausedIconUrl from "../assets/icons/paused.svg";
-import workBriefcaseIconUrl from "../assets/icons/work-briefcase-outline.svg";
+import workWrenchIconUrl from "../assets/icons/work-wrench.svg";
 import type { TimerPhase, TimerState } from "../types/app";
 
 interface Props {
@@ -35,7 +35,7 @@ defineProps<Props>();
         v-else
         class="timer-icon"
         :style="{
-          '--timer-icon-url': `url(&quot;${state.status === 'idle' ? idleTimerIconUrl : phase === 'work' ? workBriefcaseIconUrl : breakCoffeeIconUrl}&quot;)`,
+          '--timer-icon-url': `url(&quot;${state.status === 'idle' ? idleTimerIconUrl : phase === 'work' ? workWrenchIconUrl : breakCoffeeIconUrl}&quot;)`,
         }"
         role="img"
         :aria-label="
