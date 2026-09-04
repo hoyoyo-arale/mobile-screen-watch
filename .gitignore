@@ -4,5 +4,6 @@ tmp-assets/
 
 *.local
 *.log
+.DS_Store
 
 .note/
