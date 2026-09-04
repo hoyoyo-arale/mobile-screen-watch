@@ -2,7 +2,7 @@
 import breakCoffeeIconUrl from "../assets/icons/break-coffee-outline.svg";
 import idleTimerIconUrl from "../assets/icons/idle-timer-outline.svg";
 import pausedIconUrl from "../assets/icons/paused.svg";
-import workWrenchIconUrl from "../assets/icons/work-wrench.svg";
+import workWrenchIconUrl from "../assets/icons/work-wrench-outline.svg";
 import type { TimerPhase, TimerState } from "../types/app";
 
 interface Props {
