@@ -16,6 +16,7 @@ const isoDate = computed(() => toIsoDate(props.now));
 
 <template>
   <section class="clock-block" aria-label="現在時刻">
+    <p class="clock-date">{{ dateText }}</p>
     <time class="clock-time" :datetime="isoDate">
       <span>{{ timeText.hours }}</span>
       <span aria-hidden="true">:</span>
@@ -24,7 +25,6 @@ const isoDate = computed(() => toIsoDate(props.now));
         >:{{ timeText.seconds }}</span
       >
     </time>
-    <p class="clock-date">{{ dateText }}</p>
   </section>
 </template>
 
@@ -53,7 +53,7 @@ const isoDate = computed(() => toIsoDate(props.now));
   letter-spacing: -0.06em;
 }
 .clock-date {
-  margin: clamp(24px, 5vw, 48px) 0 0;
+  margin: 0 0 clamp(24px, 5vw, 48px);
   color: var(--secondary-text);
   font-size: clamp(1rem, 3.5vw, 2rem);
   letter-spacing: 0.04em;
@@ -68,7 +68,7 @@ const isoDate = computed(() => toIsoDate(props.now));
     font-size: clamp(3rem, min(19vw, 30vh), 15rem);
   }
   .clock-date {
-    margin-top: clamp(16px, 4vh, 32px);
+    margin-bottom: clamp(16px, 4vh, 32px);
   }
 }
 </style>
