@@ -206,6 +206,39 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.clock-screen {
+  --screen-background: #090909;
+  --primary-text: #f1eee8;
+  --secondary-text: #b8b0a6;
+  --seconds-text: #c8c2b9;
+  --control-border: rgb(241 238 232 / 35%);
+  --settings-panel-border: #f1eee8;
+  display: grid;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  place-items: center;
+  padding: max(24px, env(safe-area-inset-top))
+    max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom))
+    max(24px, env(safe-area-inset-left));
+  position: relative;
+  color: var(--primary-text);
+  background: var(--screen-background);
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+
+.clock-screen.theme-light {
+  --screen-background: #f3f1ed;
+  --primary-text: #252321;
+  --secondary-text: #635e58;
+  --seconds-text: #77716a;
+  --control-border: rgb(37 35 33 / 35%);
+  --settings-panel-border: #252321;
+}
+
 .clock-display-motion {
   z-index: 1;
   pointer-events: none;
@@ -228,6 +261,19 @@ onUnmounted(() => {
 @media (hover: none) and (pointer: coarse) {
   .mobile-menu-gesture-area {
     pointer-events: auto;
+  }
+}
+
+@media (orientation: landscape) {
+  .clock-screen {
+    padding-inline: max(32px, env(safe-area-inset-left))
+      max(32px, env(safe-area-inset-right));
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .clock-screen {
+    padding-block: 16px;
   }
 }
 </style>
