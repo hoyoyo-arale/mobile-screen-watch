@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import breakCoffeeIconUrl from "../assets/icons/break-coffee.svg";
+import breakCoffeeIconUrl from "../assets/icons/break-coffee-outline.svg";
 import idleTimerIconUrl from "../assets/icons/idle-timer-outline.svg";
 import pausedIconUrl from "../assets/icons/paused.svg";
-import workHammerIconUrl from "../assets/icons/work-hammer.svg";
+import workBriefcaseIconUrl from "../assets/icons/work-briefcase-outline.svg";
 import type { TimerPhase, TimerState } from "../types/app";
 
 interface Props {
@@ -35,7 +35,7 @@ defineProps<Props>();
         v-else
         class="timer-icon"
         :style="{
-          '--timer-icon-url': `url(&quot;${state.status === 'idle' ? idleTimerIconUrl : phase === 'work' ? workHammerIconUrl : breakCoffeeIconUrl}&quot;)`,
+          '--timer-icon-url': `url(&quot;${state.status === 'idle' ? idleTimerIconUrl : phase === 'work' ? workBriefcaseIconUrl : breakCoffeeIconUrl}&quot;)`,
         }"
         role="img"
         :aria-label="
@@ -85,8 +85,8 @@ defineProps<Props>();
 }
 
 .timer-icon {
-  width: 0.85em;
-  height: 0.85em;
+  width: 0.95em;
+  height: 0.95em;
   background: currentColor;
   mask: var(--timer-icon-url) center / contain no-repeat;
 }
