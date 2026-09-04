@@ -3,6 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
+  base: "/mobile-screen-watch/",
   plugins: [vue()],
   test: {
     projects: [
