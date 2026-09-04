@@ -17,7 +17,10 @@ defineProps<Props>();
 <template>
   <section
     class="timer-display"
-    :class="`timer-display--${phase}`"
+    :class="[
+      `timer-display--${phase}`,
+      { 'timer-display--paused': state.status === 'paused' },
+    ]"
     aria-label="タイマー"
   >
     <span class="timer-icons">
@@ -45,3 +48,53 @@ defineProps<Props>();
     }}</time>
   </section>
 </template>
+
+<style scoped>
+.timer-display {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.5em;
+  margin: clamp(12px, 2.5vw, 24px) auto 0;
+  padding: 0.45em 1.1em 0.45em 0.85em;
+  border-radius: 999px;
+  font-size: 1.8rem;
+  color: var(--timer-color);
+  background: color-mix(in srgb, var(--timer-color) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--timer-color) 45%, transparent);
+  transition:
+    opacity 180ms ease,
+    border-color 180ms ease;
+}
+
+.timer-display--work {
+  --timer-color: #5fa8ff;
+}
+
+.timer-display--break {
+  --timer-color: #58c989;
+}
+
+.timer-display--paused {
+  border-style: dashed;
+  opacity: 0.7;
+}
+
+.timer-icons {
+  display: flex;
+}
+
+.timer-icon {
+  width: 0.85em;
+  height: 0.85em;
+  background: currentColor;
+  mask: var(--timer-icon-url) center / contain no-repeat;
+}
+
+.timer-time {
+  font-size: 1em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+</style>
