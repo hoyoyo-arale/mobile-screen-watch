@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import breakCoffeeIconUrl from "../assets/icons/break-coffee.svg";
+import idleTimerIconUrl from "../assets/icons/idle-timer-outline.svg";
 import pausedIconUrl from "../assets/icons/paused.svg";
 import workHammerIconUrl from "../assets/icons/work-hammer.svg";
 import type { TimerPhase, TimerState } from "../types/app";
@@ -23,10 +24,12 @@ defineProps<Props>();
       <span
         class="timer-icon"
         :style="{
-          '--timer-icon-url': `url(&quot;${phase === 'work' ? workHammerIconUrl : breakCoffeeIconUrl}&quot;)`,
+          '--timer-icon-url': `url(&quot;${state.status === 'idle' ? idleTimerIconUrl : phase === 'work' ? workHammerIconUrl : breakCoffeeIconUrl}&quot;)`,
         }"
         role="img"
-        :aria-label="phase === 'work' ? '作業' : '休憩'"
+        :aria-label="
+          state.status === 'idle' ? '待機' : phase === 'work' ? '作業' : '休憩'
+        "
       ></span>
       <span
         v-if="state.status === 'paused'"
