@@ -22,6 +22,14 @@ defineProps<Props>();
   >
     <span class="timer-icons">
       <span
+        v-if="state.status === 'paused'"
+        class="timer-icon"
+        :style="{ '--timer-icon-url': `url(&quot;${pausedIconUrl}&quot;)` }"
+        role="img"
+        aria-label="一時停止"
+      ></span>
+      <span
+        v-else
         class="timer-icon"
         :style="{
           '--timer-icon-url': `url(&quot;${state.status === 'idle' ? idleTimerIconUrl : phase === 'work' ? workHammerIconUrl : breakCoffeeIconUrl}&quot;)`,
@@ -30,13 +38,6 @@ defineProps<Props>();
         :aria-label="
           state.status === 'idle' ? '待機' : phase === 'work' ? '作業' : '休憩'
         "
-      ></span>
-      <span
-        v-if="state.status === 'paused'"
-        class="timer-icon"
-        :style="{ '--timer-icon-url': `url(&quot;${pausedIconUrl}&quot;)` }"
-        role="img"
-        aria-label="一時停止"
       ></span>
     </span>
     <time class="timer-time" :datetime="remainingText">{{
