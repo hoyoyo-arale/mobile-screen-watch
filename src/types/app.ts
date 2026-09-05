@@ -29,13 +29,6 @@ export const SETTINGS_OPTIONS = {
   movementSpeedPixelsPerSecond: [10, 15, 25],
 } as const;
 
-export const NIGHT_MODE = {
-  startHour: 1,
-  endHour: 7,
-  temporaryWakeDurationMs: 30_000,
-  speedRatio: 0.5,
-} as const;
-
 export const UI_TIMINGS = {
   menuPreviewDurationMs: 30_000,
   menuAutoHideDurationMs: 30_000,
@@ -77,8 +70,6 @@ export interface ClockMotionState {
 export interface UiState {
   isMenuOpen: boolean;
   isSettingsOpen: boolean;
-  /** 深夜表示を一時解除している場合の解除終了時刻。 */
-  nightModeWakeUntil: number | null;
 }
 
 export interface AppState {
