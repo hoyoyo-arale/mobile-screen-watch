@@ -25,6 +25,7 @@
     "prettier": "^3.9.6",
     "typescript": "^5.9.2",
     "vite": "^7.1.3",
+    "vite-plugin-pwa": "^1.3.0",
     "vitest": "^4.1.11",
     "vitest-browser-vue": "^2.1.0",
     "vue-tsc": "^3.0.6"
